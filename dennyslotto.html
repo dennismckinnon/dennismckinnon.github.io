@@ -49,16 +49,20 @@ lookupTickets = function()
 
 	
 	var location = 8;
-	var myaddr = u256.toValue(u256.fromAddress(key.address(eth.key())));
-	var check = 0;
+	var myaddrs = eth.keys();
+	var myaddr = 0;
+	var check =0;
+	for (var i = 0; i < myaddrs.length; i++) {
+		 myaddr = u256.toValue(u256.fromAddress(key.address(myaddrs[i])));
 
-	while (!u256.isNull(eth.storageAt(lottoAddr, u256.value(location)))) {
-		check = u256.toValue(eth.storageAt(lottoAddr, u256.value(location)));
-		if (check == myaddr) {
+		while (!u256.isNull(eth.storageAt(lottoAddr, u256.value(location)))) {
+			check = u256.toValue(eth.storageAt(lottoAddr, u256.value(location)));
+			if (check == myaddr) {
 
-			myTable+="<tr><td style='width: 100px;'>" + u256.toValue(eth.storageAt(lottoAddr, u256.value(location+1))) + "</td></tr>";
+				myTable+="<tr><td style='width: 100px;'>" + u256.toValue(eth.storageAt(lottoAddr, u256.value(location+1))) + "</td></tr>";
+			};
+			location=location+2;
 		};
-		location=location+2;
 	};
 
 	myTable+="</table>";
@@ -76,7 +80,7 @@ check = function()
 	var myaddr = u256.fromAddress(key.address(eth.key()));
 	var win = u256.toValue(eth.storageAt(lottoAddr,myaddr))/10000000000000000;
 	var winE = win/100;
-	var winD = win%100;
+	var winD1 = win%100;
     var winning= "<h1><font style=' color: red;'>" + winE + "." + winD + " E</font></h1>";
     document.getElementById('winnings').innerHTML = winning;
 }
