@@ -26,12 +26,6 @@ img {
 var lottoAddr = key.addressOf("13d62905469f553ba81681ca286653d5ed24a974");
 buyticket = function()
 {
-	balance = eth.balanceAt(key.address(eth.key()))
-	if (balance < 2100000000000000000) {
-		window.alert("You are too poor!")
-		return;
-	};
-
 	var ticketnum = Number(document.getElementById("ticket").value);
 	if ((ticketnum<0)||(ticketnum>255)) {
 		window.alert("Ticket numbers are in [0,255]")
@@ -40,7 +34,7 @@ buyticket = function()
 	};
 	
 	if (ticketnum != "")
-		eth.transact(key.secret(eth.key()), u256.ether(2), lottoAddr, u256.bytesOf(u256.value(ticketnum)), u256.value(10000), eth.gasPrice());
+		eth.transact(key.secret(eth.keys()[0]), u256.ether(2), lottoAddr, u256.bytesOf(u256.value(ticketnum)), u256.value(10000), eth.gasPrice());
 }
 lookupTickets = function()
 {
@@ -70,27 +64,33 @@ lookupTickets = function()
 }
 
 claim = function()
-{
-	var myaddr = u256.fromAddress(key.address(eth.key()));
-	eth.transact(key.secret(eth.key()), u256.ether(0), lottoAddr, u256.bytesOf(""), u256.value(10000), eth.gasPrice());
+{	
+	var myaddrs = eth.keys();
+	var myaddr = 0;
+	for (var i = 0; i < myaddrs.length; i++) {
+		myaddr = u256.fromAddress(key.address(myaddrs[i]));
+		eth.transact(key.secret(eth.key()), u256.ether(0), lottoAddr, u256.bytesOf(""), u256.value(10000), eth.gasPrice());
+	};
 }
 
 check = function()
 {	
-	var myaddr = u256.fromAddress(key.address(eth.key()));
-	var win = u256.toValue(eth.storageAt(lottoAddr,myaddr))/10000000000000000;
-	var winE = win/100;
-	var winD1 = win%100;
-    var winning= "<h1><font style=' color: red;'>" + winE + "." + winD + " E</font></h1>";
+	var myaddrs = eth.keys();
+	var myaddr = 0;
+	bal = 0;
+	for (var i = 0; i < myaddrs.length; i++) {
+		myaddr = u256.fromAddress(key.address(myaddrs[i]));
+		bal = bal+u256.toValue(eth.storageAt(lottoAddr,myaddr));
+	};
+	var win = bal/1000000000000000000;
+    var winning= "<h1><font style=' color: red;'>" + win.toFixed(2) + " E</font></h1>";
     document.getElementById('winnings').innerHTML = winning;
 }
 
 lookupJackpot = function()
 {
-	var Jackpot = u256.toValue(eth.storageAt(lottoAddr,u256.value(6)))/10000000000000000;
-	var jackE = Jackpot/100;
-	var jackD = Jackpot%100;
-    var JACKP = "<h1><font style=' color: red;'>" + jackE + "." + jackD + " E</font></h1>";
+	var Jackpot = u256.toValue(eth.storageAt(lottoAddr,u256.value(6)))/1000000000000000000;
+    var JACKP = "<h1><font style=' color: red;'>" + Jackpot.toFixed(2) + " E</font></h1>";
     document.getElementById('jackpt').innerHTML = JACKP;
 }
 </script>
