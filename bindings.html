@@ -1,0 +1,107 @@
+<script>
+var dbAddr = key.addressOf("1d44f704ee5ebf08bda0407ef8a438cc026751f2");
+dataentryretrieve = function()
+{
+	var infohash = GETTHEINFOHASH SOMEHOW; 
+	var infohs = u256.value(infohash);
+	var pointer = u256.add(infohs, eth.storageAt(u256.value(6));
+
+	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
+	var title = title1 + title2
+
+	var desc = ""
+	for (var i = 0; i < 25.length; i++) {
+		pointer = u256.add(pointer, u256.value(1));
+		temp = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+		desc = desc + temp;
+		
+	};
+}
+buyticket = function()
+{
+	var ticketnum = Number(document.getElementById("ticket").value);
+	if ((ticketnum<0)||(ticketnum>99)) {
+		window.alert("Ticket numbers are in [0,99]")
+		window.alert("Do it right next time!")
+		return;
+	};
+	
+	if (ticketnum != "")
+		eth.transact(key.secret(eth.keys()[0]), u256.ether(2), lottoAddr, u256.bytesOf(u256.value(ticketnum)), u256.value(10000), eth.gasPrice());
+}
+lookupTickets = function()
+{
+	var myTable= "<table><tr><td style='width: 100px; color: red;'>Your Tickets</td></tr>";
+    myTable+="<tr><td style='width: 100px;                   '>---------------</td></tr>";
+
+	
+	var location = 8;
+	var myaddrs = eth.keys();
+	var myaddr = 0;
+	var check =0;
+	for (var i = 0; i < myaddrs.length; i++) {
+		 myaddr = u256.toValue(u256.fromAddress(key.address(myaddrs[i])));
+
+		while (!u256.isNull(eth.storageAt(lottoAddr, u256.value(location)))) {
+			check = u256.toValue(eth.storageAt(lottoAddr, u256.value(location)));
+			if (check == myaddr) {
+
+				myTable+="<tr><td style='width: 100px;'>" + u256.toValue(eth.storageAt(lottoAddr, u256.value(location+1))) + "</td></tr>";
+			};
+			location=location+2;
+		};
+	};
+
+	myTable+="</table>";
+	document.getElementById('TicketTable').innerHTML = myTable;
+}
+
+claim = function()
+{	
+	var r=confirm("Are you sure? Your money is safe with me!");
+	if (r==true)
+  	{
+  		var myaddrs = eth.keys();
+		for (var i = 0; i < myaddrs.length; i++) {
+			eth.transact(key.secret(myaddrs[i]), u256.ether(0), lottoAddr, u256.bytesOf(u256.value(0)), u256.value(10000), eth.gasPrice());
+		};
+  	}
+	else
+  	{
+  		return;
+  	}
+
+}
+
+check = function()
+{	
+	var myaddrs = eth.keys();
+	var myaddr = 0;
+	bal = 0;
+	for (var i = 0; i < myaddrs.length; i++) {
+		myaddr = u256.fromAddress(key.address(myaddrs[i]));
+		bal = bal+u256.toValue(eth.storageAt(lottoAddr,myaddr));
+	};
+	var win = bal/1000000000000000000;
+    var winning= "<h1><font style=' color: red;'>" + win.toFixed(2) + " E</font></h1>";
+    document.getElementById('winnings').innerHTML = winning;
+}
+
+lookupJackpot = function()
+{
+	var Jackpot = u256.toValue(eth.storageAt(lottoAddr,u256.value(6)))/1000000000000000000;
+    var JACKP = "<h1><font style=' color: red;'>" + Jackpot.toFixed(2) + " E</font></h1>";
+    document.getElementById('jackpt').innerHTML = JACKP;
+}
+</script>
