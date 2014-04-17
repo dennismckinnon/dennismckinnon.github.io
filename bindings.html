@@ -1,18 +1,44 @@
 <script>
 var dbAddr = key.addressOf("1d44f704ee5ebf08bda0407ef8a438cc026751f2");
+dataentrywrite = function()
+{
+	var infohash = bytes.fromString(document.getElementById("infohashInputField").value, 32);
+	var title = bytes.fromString(document.getElementById("titleInputField").value, 64);
+	var uploader = bytes.fromString(document.getElementById("uploaderInputField").value, 32);
+	var filetype = bytes.fromString(document.getElementById("filetypeInputField").value, 32);
+	var filequality = bytes.fromString(document.getElementById("filequalityInputField").value, 32);
+	var descript = bytes.fromString(document.getElementById("descriptionTextArea").value, 800);
+
+	var indicator = u256.bytesOf(u256.value(1118481));
+	var command = bytes.fromString("moddbe",32);
+
+	var payload = command;
+	payload = bytes.concat(payload, infohash);
+	payload = bytes.concat(payload, indicator);
+	payload = bytes.concat(payload, uploader);
+	payload = bytes.concat(payload, filetype);
+	payload = bytes.concat(payload, filequality);
+	payload = bytes.concat(payload, title);
+	payload = bytes.concat(payload, descript);
+
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());
+
+
+};
 scanentries = function()
 {
 	var pointer1 = u256.value(16);
 	var pointer2 = u256.value(21);
 	var pointer3 = u256.value(22);
 
-	limit = u256.toValue(eth.storageAt(dbADDR, u256.value(7)));
+	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(7)));
+	var tstr = "";
 	var htpairs = new Array();
 	var temp = new Array();
 	for (var i = 0; i < limit; i++) {
 		temp[1] = eth.storageAt(dbADDR, pointer1); I DONT KNOW IF THIS WILL WORK BUT IT WOULD BE NICE TO STORE THIS AS A u256 NUMBER################
 		tstr = bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer2)));
-		tstr = tstr +bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer3)));
+		tstr = tstr + bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer3)));
 		temp[0] = tstr;
 
 		TEMP is a [Title:INFOHASH] pair (in that order hopefully)
@@ -24,7 +50,7 @@ scanentries = function()
 		pointer3 = u256.add(pointer3, u256.value(32)); 
 	};
 
-}
+};
 dataentryretrieve = function()
 {
 	var infohash = GETTHEINFOHASH SOMEHOW; 
