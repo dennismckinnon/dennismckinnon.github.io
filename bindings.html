@@ -10,10 +10,12 @@ scanentries = function()
 	var htpairs = new Array();
 	var temp = new Array();
 	for (var i = 0; i < limit; i++) {
-		temp[1] = bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer1)));
+		temp[1] = eth.storageAt(dbADDR, pointer1); I DONT KNOW IF THIS WILL WORK BUT IT WOULD BE NICE TO STORE THIS AS A u256 NUMBER################
 		tstr = bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer2)));
 		tstr = tstr +bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer3)));
 		temp[0] = tstr;
+
+		TEMP is a [Title:INFOHASH] pair (in that order hopefully)
 
 		htpairs[i] = temp;
 
