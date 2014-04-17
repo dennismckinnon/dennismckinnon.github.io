@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lotto</title>
+<meta name="generator" content="Bluefish 2.2.5" >
+<meta name="author" content="Androlo" >
+<meta name="date" content="2014-04-17T18:06:10+0200" >
+<meta name="copyright" content="">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta http-equiv="expires" content="0">
+<link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
+<link href="DAO.css" rel="stylesheet" type="text/css">
+<html>
+
+<script>
+
+generateTable = function()
+{
+
+	var table= "<table><tr><td>Tickets:</td></tr>"
+	for (var i = 0; i < 10; i++) {
+		var testName = "post" + i.toString();
+		table+='<tr><td><a href="#" onclick="resolveMagnetLink(' + '&quot;' + testName + '&quot;' + ');">' + testName + '</a></td></tr>';
+	}
+	table+="</table>";
+	document.getElementById('datatable').innerHTML = table;
+}
+
+resolveMagnetLink = function(input)
+{
+	document.getElementById('titleInputField').value = input;
+	return false;
+}
+
+</script>
+
+</head>
+<body>
+
+<div id="header">
+	<h1>Denny's autonomous terrorist organization</h1>
+</div>
+
+<div>
+	<div id="container">
+		<div id="viewsection">
+			INFOHASH: <input type="text" name="INFOHASH" id="uploaderInputField" disabled><br>
+			Uploader: <input type="text" name="uploader" id="uploaderInputField" disabled><br>
+			File Type: <input type="text" name="filetype" id="filetypeInputField" disabled><br>
+			File Quality: <input type="text" name="filequality" id="filequalityInputField" disabled><br>
+			Title: <input type="text" name="title" id="titleInputField" disabled><br>
+			Description:<br>
+			<textarea name="description" id="descriptionTextArea" rows="10" cols="50"></textarea>
+			<button class="dlButton blue" onClick="updateDocument()">Update Document</button>
+			
+		</div>
+		<div id="tablesection">
+			<button class="dlButton blue" onClick="generateTable()">Documents</button>
+		<div id="datatable" ></div>
+		</div>	
+	</div>
+	
+	
+</div>
+	
+</body>
+</html>
