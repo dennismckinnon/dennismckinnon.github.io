@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-18T00:36:34+0200" >
+<meta name="date" content="2014-04-18T00:48:03+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -95,8 +95,6 @@ resolveMagnetLink = function(hashIndex)
 	document.getElementById('filequalityInputField').value = filequality;
 	document.getElementById('titleInputField').value = title;
 	document.getElementById('descriptionTextArea').value = desc;
-	
-	return false;
 	
 }
 
