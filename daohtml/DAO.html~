@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Lotto</title>
+<title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-17T19:57:29+0200" >
+<meta name="date" content="2014-04-17T21:48:20+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -19,82 +19,46 @@
 
 <script>
 
-var dbAddr = key.addressOf("1d44f704ee5ebf08bda0407ef8a438cc026751f2");
-
-resolveMagnetLink = function(infohash)
-{
-	 
-	var infohs = u256.value(infohash);
-	var pointer = u256.add(infohs, eth.storageAt(u256.value(6));
-	
-	pointer = eth.storageAt(dbADDR, pointer)
-
-	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-
-	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-
-	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-
-	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
-	var title = title1 + title2
-
-	var desc = ""
-	for (var i = 0; i < 25.length; i++) {
-		pointer = u256.add(pointer, u256.value(1));
-		temp = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-		desc = desc + temp;
-		
-	};
-	
-	document.getElementById('infohashInputField').value = infohash;
-	document.getElementById('uploaderInputField').value = uploader;
-	document.getElementById('filetypeInputField').value = filetype;
-	document.getElementById('filequalityInputField').value = filequality;
-	document.getElementById('titleInputField').value = title;
-	document.getElementById('descriptionTextArea').value = desc;
-	
-	return false;
-	
-}
+var dbADDR = key.addressOf("014292be0cd934672fb43ffbb85d90bf90cf4434");
 
 generateTable = function()
 {
+
 	var pointer1 = u256.value(16);
 	var pointer2 = u256.value(21);
 	var pointer3 = u256.value(22);
 
-	limit = u256.toValue(eth.storageAt(dbADDR, u256.value(7)));
+	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(7)));
 	var htpairs = new Array();
-	var temp = new Array();
+	
 	for (var i = 0; i < limit; i++) {
-		temp[1] = eth.storageAt(dbADDR, pointer1); I DONT KNOW IF THIS WILL WORK BUT IT WOULD BE NICE TO STORE THIS AS A u256 NUMBER################
-		tstr = bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer2)));
-		tstr = tstr +bytes.toString(u256,bytesOf(eth.storageAt(dbADDR, pointer3)));
-		temp[0] = tstr;
-
-		TEMP is a [Title:INFOHASH] pair (in that order hopefully)
-
-		htpairs[i] = temp;
+				 
+		var tstr = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer2)));
+		tstr = tstr + bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer3)));
+		htpairs[2*i + 1] = tstr;
+		htpairs[2*i] = eth.storageAt(dbADDR, pointer1);
 
 		pointer1 = u256.add(pointer1, u256.value(32));
 		pointer2 = u256.add(pointer2, u256.value(32));
 		pointer3 = u256.add(pointer3, u256.value(32)); 
 	};
+
+	var table= "<table><tr><td>Tickets:</td></tr>";
 	
-	var table= "<table><tr><td>Tickets:</td></tr>"
-	for (var i = 0; i < htpairs.length; i++) {
-		
-		table+='<tr><td><a href="#" onclick="resolveMagnetLink(' + '&quot;' + (htpairs[0])[1] + '&quot;' + ');">' + (htpairs[0])[0] + '</a></td></tr>';
+	var counter = 0;
+	for (var j = 0; j < htpairs.length/2; j++) {
+		table+='<tr><td><a href="#" onclick="resolveMagnetLink(' + '&quot;' + htpairs[counter++] + '&quot;' + ');">' + htpairs[counter++] + '</a></td></tr>';
 	}
+	
 	table+="</table>";
 	document.getElementById('datatable').innerHTML = table;
+	
 }
 
+updateDocument = function()
+{
+
+}
 
 
 
@@ -104,16 +68,59 @@ generateTable = function()
 <body>
 
 <div id="header">
-	<h1>Denny's autonomous terrorist organization</h1>
+	<h1>Denny's DAO</h1>
 </div>
 
-
+<!--
 <div id="menu">
 	<ul>
 		<li><a href="#" title="Home">Home</a></li>
 		<li><a href="#" title="Blog" class="active">Blog</a></li>
 	</ul>
-</div>
+</div>	
+	
+
+resolveMagnetLink = function(infohash)
+{
+	
+	
+	var infohs = bytes.u256of(bytes.fromString(infohash));
+	var pointer = u256.add(infohs, eth.storageAt(u256.value(6));
+	
+	pointer = eth.storageAt(dbADDR, pointer)
+
+	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	var title = title1 + title2
+
+	var desc = ""
+	for (var i = 0; i < 25.length; i++) {
+		pointer = u256.add(pointer, u256.value(1));
+		var temp = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+		desc = desc + temp;
+	}
+	
+	document.getElementById('infohashInputField').value = infohash;
+	document.getElementById('uploaderInputField').value = uploader;
+	document.getElementById('filetypeInputField').value = filetype;
+	document.getElementById('filequalityInputField').value = filequality;
+	document.getElementById('titleInputField').value = title;
+	document.getElementById('descriptionTextArea').value = desc;
+	
+	return false;
+}	
+	
+-->
 
 <div>
 	<div id="containerEdit">
@@ -137,21 +144,6 @@ generateTable = function()
 		</div>	
 	</div>
 	
-	<div id="containerCreate">
-		<div id="viewsection">
-			<h2>Edit data</h2>
-			INFOHASH: <input type="text" name="INFOHASH" id="uploaderInputField"><br>
-			Uploader: <input type="text" name="uploader" id="uploaderInputField"><br>
-			File Type: <input type="text" name="filetype" id="filetypeInputField"><br>
-			File Quality: <input type="text" name="filequality" id="filequalityInputField"><br>
-			Title: <input type="text" name="title" id="titleInputField"><br>
-			Description:<br>
-			<textarea name="description" id="descriptionTextArea" rows="10" cols="50"></textarea>
-			<br>
-			<button class="dlButton blue" onClick="updateDocument()">Create Document</button>
-			
-		</div>
-	</div>
 	
 </div>
 	
