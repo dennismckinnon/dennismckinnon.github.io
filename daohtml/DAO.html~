@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-17T23:40:22+0200" >
+<meta name="date" content="2014-04-18T00:36:34+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -50,7 +50,7 @@ generateTable = function()
 	var table= "<table><tr><td>Tickets:</td></tr>";
 	
 	for (var j = 0; j < titles.length; j++) {
-		table+='<tr><td><a href="#" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + titles[j] + '</a></td></tr>';
+		table+='<tr><td><a href="javascript:void(0)" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + titles[j] + '</a></td></tr>';
 	}
 	
 	table+="</table>";
@@ -61,14 +61,42 @@ generateTable = function()
 resolveMagnetLink = function(hashIndex)
 {
 	var index = parseInt(hashIndex);
-	var infosh = infohashes[index];
+	var infohs = infohashes[index];
 	
-	var pointer = u256.add(infohs, eth.storageAt(u256.value(6));
+	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(6)));
 	pointer = eth.storageAt(dbADDR, pointer);
 
+	pointer = u256.add(pointer, u256.value(2));
+
+	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+
+	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	var title = title1 + title2;
+
+	var desc = "";
+	for (var i = 0; i < 25; i++) {
+		pointer = u256.add(pointer, u256.value(1));
+		var temp = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+		desc = desc + temp;
+	}
 	
+	document.getElementById('infohashInputField').value = (u256.toValue(infohs)).toString(16);
+	document.getElementById('uploaderInputField').value = uploader;
+	document.getElementById('filetypeInputField').value = filetype;
+	document.getElementById('filequalityInputField').value = filequality;
+	document.getElementById('titleInputField').value = title;
+	document.getElementById('descriptionTextArea').value = desc;
 	
-	document.getElementById('infohashInputField').value = infosh;
+	return false;
 	
 }
 
@@ -99,11 +127,7 @@ updateDocument = function()
 
 	
 
-	document.getElementById('uploaderInputField').value = uploader;
-	document.getElementById('filetypeInputField').value = filetype;
-	document.getElementById('filequalityInputField').value = filequality;
-	document.getElementById('titleInputField').value = title;
-	document.getElementById('descriptionTextArea').value = desc;
+	
 	
 
 	
