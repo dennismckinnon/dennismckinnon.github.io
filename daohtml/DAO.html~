@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-17T22:50:31+0200" >
+<meta name="date" content="2014-04-17T23:40:22+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -39,7 +39,7 @@ generateTable = function()
 		var tstr = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer2)));
 		tstr = tstr + bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer3)));
 		titles[i] = tstr;
-		infohashes[i] = u256.toValue(eth.storageAt(dbADDR, pointer1));
+		infohashes[i] = eth.storageAt(dbADDR, pointer1);
 
 		pointer1 = u256.add(pointer1, u256.value(32));
 		pointer2 = u256.add(pointer2, u256.value(32));
@@ -60,12 +60,15 @@ generateTable = function()
 
 resolveMagnetLink = function(hashIndex)
 {
-
 	var index = parseInt(hashIndex);
+	var infosh = infohashes[index];
 	
-	var infohs = u256.value(infohashes[index]);
+	var pointer = u256.add(infohs, eth.storageAt(u256.value(6));
+	pointer = eth.storageAt(dbADDR, pointer);
+
 	
-	<!--document.getElementById('infohashInputField').value = bytes.toString(infohs);-->
+	
+	document.getElementById('infohashInputField').value = infosh;
 	
 }
 
@@ -95,6 +98,12 @@ updateDocument = function()
 	
 
 	
+
+	document.getElementById('uploaderInputField').value = uploader;
+	document.getElementById('filetypeInputField').value = filetype;
+	document.getElementById('filequalityInputField').value = filequality;
+	document.getElementById('titleInputField').value = title;
+	document.getElementById('descriptionTextArea').value = desc;
 	
 
 	

@@ -22,11 +22,6 @@ img {
 }
 
 #containerEdit {
-	display: block;
-}
-
-#containerCreate {
-	display: none;
 }
 
 #viewsection {
