@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-17T21:48:20+0200" >
+<meta name="date" content="2014-04-17T22:50:31+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -21,6 +21,8 @@
 
 var dbADDR = key.addressOf("014292be0cd934672fb43ffbb85d90bf90cf4434");
 
+var infohashes = new Array();
+
 generateTable = function()
 {
 
@@ -29,29 +31,41 @@ generateTable = function()
 	var pointer3 = u256.value(22);
 
 	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(7)));
-	var htpairs = new Array();
+	var titles = new Array();
+	infohashes = new Array();
 	
 	for (var i = 0; i < limit; i++) {
 				 
 		var tstr = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer2)));
 		tstr = tstr + bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer3)));
-		htpairs[2*i + 1] = tstr;
-		htpairs[2*i] = eth.storageAt(dbADDR, pointer1);
+		titles[i] = tstr;
+		infohashes[i] = u256.toValue(eth.storageAt(dbADDR, pointer1));
 
 		pointer1 = u256.add(pointer1, u256.value(32));
 		pointer2 = u256.add(pointer2, u256.value(32));
 		pointer3 = u256.add(pointer3, u256.value(32)); 
+		
 	};
 
 	var table= "<table><tr><td>Tickets:</td></tr>";
 	
-	var counter = 0;
-	for (var j = 0; j < htpairs.length/2; j++) {
-		table+='<tr><td><a href="#" onclick="resolveMagnetLink(' + '&quot;' + htpairs[counter++] + '&quot;' + ');">' + htpairs[counter++] + '</a></td></tr>';
+	for (var j = 0; j < titles.length; j++) {
+		table+='<tr><td><a href="#" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + titles[j] + '</a></td></tr>';
 	}
 	
 	table+="</table>";
 	document.getElementById('datatable').innerHTML = table;
+	
+}
+
+resolveMagnetLink = function(hashIndex)
+{
+
+	var index = parseInt(hashIndex);
+	
+	var infohs = u256.value(infohashes[index]);
+	
+	<!--document.getElementById('infohashInputField').value = bytes.toString(infohs);-->
 	
 }
 
@@ -80,45 +94,9 @@ updateDocument = function()
 </div>	
 	
 
-resolveMagnetLink = function(infohash)
-{
 	
 	
-	var infohs = bytes.u256of(bytes.fromString(infohash));
-	var pointer = u256.add(infohs, eth.storageAt(u256.value(6));
-	
-	pointer = eth.storageAt(dbADDR, pointer)
 
-	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-
-	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-
-	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-
-	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	var title = title1 + title2
-
-	var desc = ""
-	for (var i = 0; i < 25.length; i++) {
-		pointer = u256.add(pointer, u256.value(1));
-		var temp = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-		desc = desc + temp;
-	}
-	
-	document.getElementById('infohashInputField').value = infohash;
-	document.getElementById('uploaderInputField').value = uploader;
-	document.getElementById('filetypeInputField').value = filetype;
-	document.getElementById('filequalityInputField').value = filequality;
-	document.getElementById('titleInputField').value = title;
-	document.getElementById('descriptionTextArea').value = desc;
-	
-	return false;
-}	
 	
 -->
 
@@ -126,7 +104,7 @@ resolveMagnetLink = function(infohash)
 	<div id="containerEdit">
 		<div id="viewsection">
 			<h2>Edit data</h2>
-			INFOHASH: <input type="text" name="INFOHASH" id="uploaderInputField" disabled><br>
+			INFOHASH: <input type="text" name="INFOHASH" id="infohashInputField" disabled><br>
 			Uploader: <input type="text" name="uploader" id="uploaderInputField" disabled><br>
 			File Type: <input type="text" name="filetype" id="filetypeInputField" disabled><br>
 			File Quality: <input type="text" name="filequality" id="filequalityInputField" disabled><br>
