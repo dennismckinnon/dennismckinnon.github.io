@@ -50,6 +50,11 @@ h2 {
 }
 
 #containerEdit {
+	display: block;
+}
+
+#containerAdmin{
+    display: none;
 }
 
 #viewsection {
@@ -113,25 +118,18 @@ h2 {
     margin-right: 20px;
 }
 
-/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
-#menu ul li a { 
+#menu ul li a {
 padding:5px; 
 background: rgba(220,220,255); 
 text-decoration: none; color: #402e16;
 	text-shadow: #eee 0px 0px 2px; 
 }
 
-#menu ul li.admin {
-	
-}
-	
-/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
 #menu ul li a:hover {
 	background-color:rgb(150,150,225,0.7) !important;
 	opacity: 0.7;
 }
 
-/* another RGBA background, now with an opacity of 0.8 */
 #menu ul li a.active { 
 background: rgb(180,180,225,1.0);
 }
@@ -174,6 +172,8 @@ background: rgb(180,180,225,1.0) !important;
 /* Table buttons */
 #tableMenu {
 }
+
+
 
 #tableMenu ul { 
     list-style:none;

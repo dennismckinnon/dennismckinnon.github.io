@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-18T15:40:57+0200" >
+<meta name="date" content="2014-04-18T21:26:42+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -16,20 +16,42 @@
 <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
 
 <link href="DAO.css" rel="stylesheet" type="text/css">
-<html>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
 <script>
 
 var dbADDR = key.addressOf("c75c7d153254dfc065000f614f7d0537440ddb5a");
+var adminADDR = key.addressOf("");
 
 var infohashes = new Array();
 
-window.onload = function(){
-	
+window.onload = function(){   
+
+	var list = document.getElementById("adminLinks").style.display = "inline";
+
+<!--
+    if (list.style.display == "none"){
+        list.style.display = "inline";
+    }else{
+        list.style.display = "none";
+    }
+-->
 }
 
-generateTable = function()
-{
+switchPage = function(){
+
+	var list = document.getElementById("containerEdit");
+
+   if (list.style.display == "none"){
+   	 document.getElementById("containerAdmin").style.display = "none";
+       list.style.display = "block";
+   } else {
+       list.style.display = "none";
+       document.getElementById("containerAdmin").style.display = "block";
+   }
+}
+
+generateTable = function(){
 	
 	var pointer1 = u256.value(16);
 	var pointer2 = u256.value(21);
@@ -55,10 +77,8 @@ generateTable = function()
 	var table= "<table>";
 	
 	for (var j = 0; j < titles.length; j++) {
-	if(titles[j] != ""){
 			table+='<tr><td><a href="javascript:void(0)" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + 
 			j + ':  ' + titles[j] + '</a></td></tr>';
-		}
 	}
 	
 	table+="</table>";
@@ -163,8 +183,10 @@ clearDocument = function()
 	<h1>Denny's DAO</h1>
 	<div id="menu">
 		<ul>
-			<li><a href="#" title="Data">Data Management</a></li>
-			<li><a href="#" title="Admin">Admin</a></li>
+			<li><a href="javascript:void(0)" title="Data" onclick="switchPage()">Data Management</a></li>
+		</ul>
+		<ul id="adminLinks">
+			<li><a href="javascript:void(0)" title="Admin" onclick="switchPage()">Admin</a></li>
 		</ul>
 	</div>
 	<br><hr style="color:black" />
@@ -205,7 +227,7 @@ clearDocument = function()
 	</div>
 
 	<div id="containerAdmin">
-	
+		Haha...
 	</div>
 	
 </div>
