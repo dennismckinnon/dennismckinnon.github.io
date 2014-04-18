@@ -19,7 +19,7 @@
 
 <script>
 
-var dbADDR = key.addressOf("593e8cc5a0e061b24e960ddf9e6b3abd2cbe574e");
+var dbADDR = key.addressOf("c75c7d153254dfc065000f614f7d0537440ddb5a");
 
 var infohashes = new Array();
 
@@ -100,8 +100,49 @@ resolveMagnetLink = function(hashIndex)
 
 updateDocument = function()
 {
+	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
+	var title = bytes.fromString(document.getElementById("titleInputField").value, 64);
+	var uploader = bytes.fromString(document.getElementById("uploaderInputField").value, 32);
+	var filetype = bytes.fromString(document.getElementById("filetypeInputField").value, 32);
+	var filequality = bytes.fromString(document.getElementById("filequalityInputField").value, 32);
+	var descript = bytes.fromString(document.getElementById("descriptionTextArea").value, 800);
 
-}
+	var indicator = u256.bytesOf(u256.value(parseInt("111111", 16)));
+	var command = bytes.fromString("moddbe",32);
+
+	var payload = command;
+	payload = bytes.concat(payload, infohash);
+	payload = bytes.concat(payload, indicator);
+	payload = bytes.concat(payload, uploader);
+	payload = bytes.concat(payload, filetype);
+	payload = bytes.concat(payload, filequality);
+	payload = bytes.concat(payload, title);
+	payload = bytes.concat(payload, descript);
+
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());
+
+};
+
+deleteDocument = function()
+{
+	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
+	var command = bytes.fromString("deldbe",32);
+
+	var payload = bytes.concat(command,infohash);
+
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());
+
+};
+
+clearDocument = function()
+{
+	document.getElementById('infohashInputField').value = "";
+	document.getElementById('uploaderInputField').value = "";
+	document.getElementById('filetypeInputField').value = "";
+	document.getElementById('filequalityInputField').value = "";
+	document.getElementById('titleInputField').value = "";
+	document.getElementById('descriptionTextArea').value = "";
+};
 
 
 
@@ -135,15 +176,17 @@ updateDocument = function()
 	<div id="containerEdit">
 		<div id="viewsection">
 			<h2>Edit data</h2>
-			INFOHASH: <input type="text" name="INFOHASH" id="infohashInputField" disabled><br>
-			Uploader: <input type="text" name="uploader" id="uploaderInputField" disabled><br>
-			File Type: <input type="text" name="filetype" id="filetypeInputField" disabled><br>
-			File Quality: <input type="text" name="filequality" id="filequalityInputField" disabled><br>
-			Title: <input type="text" name="title" id="titleInputField" disabled><br>
+			INFOHASH: <input type="text" name="INFOHASH" id="infohashInputField" ><br>
+			Uploader: <input type="text" name="uploader" id="uploaderInputField" ><br>
+			File Type: <input type="text" name="filetype" id="filetypeInputField" ><br>
+			File Quality: <input type="text" name="filequality" id="filequalityInputField" ><br>
+			Title: <input type="text" name="title" id="titleInputField" ><br>
 			Description:<br>
 			<textarea name="description" id="descriptionTextArea" rows="10" cols="50"></textarea>
 			<br>
-			<button class="dlButton blue" onClick="updateDocument()">Update Document</button>
+			<button class="dlButton blue" onClick="updateDocument()">Update/Add</button>
+			<button class="dlButton blue" onClick="deleteDocument()">Delete</button>
+			<button class="dlButton blue" onClick="clearDocument()">Clear</button>
 			
 		</div>
 		<div id="tablesection">

@@ -1,15 +1,21 @@
 <script>
 var dbAddr = key.addressOf("1d44f704ee5ebf08bda0407ef8a438cc026751f2");
+var umADDR = key.addressof("");
+addMember = function()
+{
+	var memberID = bytes.fromString
+}
+
 dataentrywrite = function()
 {
-	var infohash = bytes.fromString(document.getElementById("infohashInputField").value, 32);
+	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
 	var title = bytes.fromString(document.getElementById("titleInputField").value, 64);
 	var uploader = bytes.fromString(document.getElementById("uploaderInputField").value, 32);
 	var filetype = bytes.fromString(document.getElementById("filetypeInputField").value, 32);
 	var filequality = bytes.fromString(document.getElementById("filequalityInputField").value, 32);
 	var descript = bytes.fromString(document.getElementById("descriptionTextArea").value, 800);
 
-	var indicator = u256.bytesOf(u256.value(1118481));
+	var indicator = u256.bytesOf(u256.value(parseInt("111111", 16));
 	var command = bytes.fromString("moddbe",32);
 
 	var payload = command;
@@ -53,14 +59,10 @@ scanentries = function()
 };
 dataentryretrieve = function()
 {
-	var infohash = GETTHEINFOHASH SOMEHOW; 
-	var infohs = u256.value(infohash);
+	var infohs = infohash[hashIndex];
 	var pointer = u256.add(infohs, eth.storageAt(u256.value(6));
 
-	THIS IS THE PART I FORGOT
-	--------------------------------------------
 	pointer = eth.storageAt(dbADDR, pointer)
-	-------------------------------------------- the reason is that storage at the previous point related tot he infohash is used as a lookup for the actual location of the database entry associated with the infohash.
 
 	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbAddr, pointer)));
 	pointer = u256.add(pointer, u256.value(1));
