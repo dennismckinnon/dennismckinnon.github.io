@@ -1,24 +1,52 @@
+
+/* Misc */
 body {
 	font-family: Sniglet;
+	background-image: url(./congruent_outline.png); 
+	background-repeat: repeat;
 }
 h1 {
 	font-family: Sniglet;
 	font-size: 250%;
-} 
+}
 
 h2 {
 	font-family: Sniglet;
-	font-size: 13pt;
+	font-size: 16pt;
+	
 }
 
-img {
-	margin: 4pt;
-	padding: 6pt;
+ hr {
+  	border: 0;
+  	width: 100%;
+  	color: #000;
+	background-color: #000;
+	height: 2px;
 }
+
+.centerText {
+	text-align: center;
+}
+
+.textInput{
+	position: absolute;
+	left:110px;
+	width: 245px;
+}
+
+#logo {
+	float: left;
+	background-image: url(./ethereum.png); 
+	background-repeat: no-repeat;
+	height: 80px;
+	width: 80px;
+}​
+
+/* Divs */
 
 #header {
-	padding:10px 10px;
-	background:#FAFCFC;
+	padding:10px;
+	height: 136px;
 }
 
 #containerEdit {
@@ -26,38 +54,30 @@ img {
 
 #viewsection {
 	float: left;
+	height: 480px;
 	padding:5px 10px;
-	background:#eee;
-	border:1px solid;
+	margin-top: 10px;
+	margin-right: 10px;
+	line-height: 150%;
+	border:2px solid;
+	border-radius:5px;
+	border-color: #402e16;
 }
 
 #tablesection {
 	float: left;
 	padding:5px 10px;
-	background:#eef;
-	border:1px solid;
+	margin-top: 10px;
+	border:2px solid;
+	border-radius:5px;
+	border-color: #402e16;
 }
+
+/* The table */
 
 #datatable {
 	margin:0px;padding:0px;
 	width:100%;
-	border:1px solid #000000;
-	
-	-moz-border-radius-bottomleft:0px;
-	-webkit-border-bottom-left-radius:0px;
-	border-bottom-left-radius:0px;
-	
-	-moz-border-radius-bottomright:0px;
-	-webkit-border-bottom-right-radius:0px;
-	border-bottom-right-radius:0px;
-	
-	-moz-border-radius-topright:0px;
-	-webkit-border-top-right-radius:0px;
-	border-top-right-radius:0px;
-	
-	-moz-border-radius-topleft:0px;
-	-webkit-border-top-left-radius:0px;
-	border-top-left-radius:0px;
 }
 
 #datatable table{
@@ -65,135 +85,127 @@ img {
         border-spacing: 0;
 	width:100%;
 	height:100%;
-	margin:0px;padding:0px;
+	margin:0px;
+	padding:0px;
 }
 
-#datatable tr:last-child td:last-child {
-	-moz-border-radius-bottomright:0px;
-	-webkit-border-bottom-right-radius:0px;
-	border-bottom-right-radius:0px;
+#datatable a {
+    color: #00a;
+    text-decoration: none;
 }
 
-#datatable table tr:first-child td:first-child {
-	-moz-border-radius-topleft:0px;
-	-webkit-border-top-left-radius:0px;
-	border-top-left-radius:0px;
+#datatable a:hover {
+    color: #22c;   
+    text-decoration: none;
 }
 
-#datatable table tr:first-child td:last-child {
-	-moz-border-radius-topright:0px;
-	-webkit-border-top-right-radius:0px;
-	border-top-right-radius:0px;
+/* The menu */
+#menu {  }
+
+#menu ul { 
+    list-style:none;
+    padding-left:0;
+    margin-left: 0; 
+}
+#menu ul li { 
+    display:inline; 
+    float:left;
+    margin-right: 20px;
 }
 
-#datatable tr:last-child td:first-child{
-	-moz-border-radius-bottomleft:0px;
-	-webkit-border-bottom-left-radius:0px;
-	border-bottom-left-radius:0px;
-}.CSSTableGenerator tr:hover td{
+/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
+#menu ul li a { 
+padding:5px; 
+background: rgba(220,220,255); 
+text-decoration: none; color: #402e16;
+	text-shadow: #eee 0px 0px 2px; 
+}
+
+#menu ul li.admin {
 	
 }
-#datatable tr:nth-child(odd){ background-color:#cccccc; }
-#datatable tr:nth-child(even)    { background-color:#cccc99; }.CSSTableGenerator td{
-	vertical-align:middle;
 	
-	border:1px solid #000000;
-	border-width:0px 1px 1px 0px;
-	text-align:left;
-	padding:7px;
-	font-size:10px;
-	font-family:Arial;
-	font-weight:normal;
-	color:#000000;
+/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
+#menu ul li a:hover {
+	background-color:rgb(150,150,225,0.7) !important;
+	opacity: 0.7;
 }
 
-#datatable tr:last-child td{
-	border-width:0px 1px 0px 0px;
+/* another RGBA background, now with an opacity of 0.8 */
+#menu ul li a.active { 
+background: rgb(180,180,225,1.0);
 }
 
-#datatable tr td:last-child{
-	border-width:0px 0px 1px 0px;
+/* Edit buttons */
+#editMenu {
 }
 
-#datatable tr:last-child td:last-child{
-	border-width:0px 0px 0px 0px;
+#editMenu ul { 
+    list-style:none;
+    padding-left: 0;
+    margin-left: 0;
+}
+#editMenu ul li { 
+    display:inline;
+    float:left;
+    margin-right: 10px;
+    border:1px solid;
+	 border-radius:5px;
+	 border-color: #402e16;
 }
 
-#datatable tr:first-child td{
-		background:-o-linear-gradient(bottom, #003366 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #003366), color-stop(1, #003f7f) );
-	background:-moz-linear-gradient( center top, #003366 5%, #003f7f 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#003366", endColorstr="#003f7f");	background: -o-linear-gradient(top,#003366,003f7f);
-
-	background-color:#003366;
-	border:0px solid #000000;
-	text-align:center;
-	border-width:0px 0px 1px 1px;
-	font-size:14px;
-	font-family:Arial;
-	font-weight:bold;
-	color:#ffffff;
+/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
+#editMenu ul li a { 
+padding:5px; 
+background: rgba(220,220,255); 
+text-decoration: none; color: #402e16;
+	text-shadow: #eee 0px 0px 2px; 
+}
+	
+/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
+#editMenu ul li a:hover 
+{
+	background-color:rgb(150,150,225,0.7) !important;
+	opacity: 0.7;
 }
 
-#datatable tr:first-child:hover td{
-	background:-o-linear-gradient(bottom, #003366 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #003366), color-stop(1, #003f7f) );
-	background:-moz-linear-gradient( center top, #003366 5%, #003f7f 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#003366", endColorstr="#003f7f");	background: -o-linear-gradient(top,#003366,003f7f);
-
-	background-color:#003366;
+/* another RGBA background, now with an opacity of 0.8 */
+#editMenu ul li a.active { 
+background: rgb(180,180,225,1.0) !important; 
 }
 
-#datatable tr:first-child td:first-child{
-	border-width:0px 0px 1px 0px;
+/* Table buttons */
+#tableMenu {
 }
 
-#datatable tr:first-child td:last-child{
-	border-width:0px 0px 1px 1px;
+#tableMenu ul { 
+    list-style:none;
+    padding-left: 0;
+    margin-left: 0;
+    
+}
+#tableMenu ul li { 
+    display:inline;
+    float:left;
+    border:1px solid;
+	 border-radius:5px;
+	 border-color: #402e16;
 }
 
-
-.dlButton {
-	display: inline-block;
-	outline: none;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	font: 14px/100% Sniglet;
-	padding: .5em 2em .55em;
-	text-shadow: 0 1px 1px rgba(0,0,0,.3);
-	-webkit-border-radius: .5em; 
-	-moz-border-radius: .5em;
-	border-radius: .5em;
-	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
+#tableMenu ul li a { 
+padding:5px; 
+text-decoration: none; color: #402e16;
 }
-.dlButton:hover {
-	text-decoration: none;
-}
-.dlButton:active {
-	position: relative;
-	top: 1px;
+	
+/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
+#tableMenu ul li a:hover 
+{
+	background-color:rgb(150,150,225,0.7) !important;
+	opacity: 0.7;
 }
 
-
-/* blue */
-.blue {
-	color: #d9eef7;
-	border: solid 1px #0076a3;
-	background: #0095cd;
-	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
-	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
-}
-.blue:hover {
-	background: #007ead;
-	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
-	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
-}
-.blue:active {
-	color: #80bed6;
-	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
-	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+/* another RGBA background, now with an opacity of 0.8 */
+#tableMenu ul li a.active { 
+background: rgb(180,180,225,1.0) !important; 
 }

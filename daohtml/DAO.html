@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-18T00:57:26+0200" >
+<meta name="date" content="2014-04-18T15:40:57+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -14,43 +14,51 @@
 <meta http-equiv="content-style-type" content="text/css">
 <meta http-equiv="expires" content="0">
 <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
+
 <link href="DAO.css" rel="stylesheet" type="text/css">
 <html>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
 
 var dbADDR = key.addressOf("c75c7d153254dfc065000f614f7d0537440ddb5a");
 
 var infohashes = new Array();
 
+window.onload = function(){
+	
+}
+
 generateTable = function()
 {
-
+	
 	var pointer1 = u256.value(16);
 	var pointer2 = u256.value(21);
 	var pointer3 = u256.value(22);
-
+	
 	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(7)));
 	var titles = new Array();
 	infohashes = new Array();
 	
 	for (var i = 0; i < limit; i++) {
-				 
+		
 		var tstr = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer2)));
 		tstr = tstr + bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer3)));
 		titles[i] = tstr;
 		infohashes[i] = eth.storageAt(dbADDR, pointer1);
-
+		
 		pointer1 = u256.add(pointer1, u256.value(32));
 		pointer2 = u256.add(pointer2, u256.value(32));
 		pointer3 = u256.add(pointer3, u256.value(32)); 
 		
 	};
-
-	var table= "<table><tr><td>Tickets:</td></tr>";
+	
+	var table= "<table>";
 	
 	for (var j = 0; j < titles.length; j++) {
-		table+='<tr><td><a href="javascript:void(0)" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + titles[j] + '</a></td></tr>';
+	if(titles[j] != ""){
+			table+='<tr><td><a href="javascript:void(0)" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + 
+			j + ':  ' + titles[j] + '</a></td></tr>';
+		}
 	}
 	
 	table+="</table>";
@@ -65,23 +73,23 @@ resolveMagnetLink = function(hashIndex)
 	
 	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(6)));
 	pointer = eth.storageAt(dbADDR, pointer);
-
+	
 	pointer = u256.add(pointer, u256.value(2));
-
+	
 	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
 	pointer = u256.add(pointer, u256.value(1));
-
+	
 	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
 	pointer = u256.add(pointer, u256.value(1));
-
+	
 	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
 	pointer = u256.add(pointer, u256.value(1));
-
+	
 	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
 	pointer = u256.add(pointer, u256.value(1));
 	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
 	var title = title1 + title2;
-
+	
 	var desc = "";
 	for (var i = 0; i < 25; i++) {
 		pointer = u256.add(pointer, u256.value(1));
@@ -106,10 +114,10 @@ updateDocument = function()
 	var filetype = bytes.fromString(document.getElementById("filetypeInputField").value, 32);
 	var filequality = bytes.fromString(document.getElementById("filequalityInputField").value, 32);
 	var descript = bytes.fromString(document.getElementById("descriptionTextArea").value, 800);
-
+	
 	var indicator = u256.bytesOf(u256.value(parseInt("111111", 16)));
 	var command = bytes.fromString("moddbe",32);
-
+	
 	var payload = command;
 	payload = bytes.concat(payload, infohash);
 	payload = bytes.concat(payload, indicator);
@@ -118,7 +126,7 @@ updateDocument = function()
 	payload = bytes.concat(payload, filequality);
 	payload = bytes.concat(payload, title);
 	payload = bytes.concat(payload, descript);
-
+	
 	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());
 
 };
@@ -130,8 +138,8 @@ deleteDocument = function()
 
 	var payload = bytes.concat(command,infohash);
 
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());
-
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());	
+	clearDocument();
 };
 
 clearDocument = function()
@@ -144,58 +152,61 @@ clearDocument = function()
 	document.getElementById('descriptionTextArea').value = "";
 };
 
-
-
 </script>
 
 </head>
 <body>
 
 <div id="header">
+	<div id="logo"></div>
+	
 	<h1>Denny's DAO</h1>
+	<div id="menu">
+		<ul>
+			<li><a href="#" title="Data">Data Management</a></li>
+			<li><a href="#" title="Admin">Admin</a></li>
+		</ul>
+	</div>
+	<br><hr style="color:black" />
 </div>
-
-<!--
-<div id="menu">
-	<ul>
-		<li><a href="#" title="Home">Home</a></li>
-		<li><a href="#" title="Blog" class="active">Blog</a></li>
-	</ul>
-</div>	
-	
-
-	
-
-	
-	
-
-	
--->
 
 <div>
 	<div id="containerEdit">
 		<div id="viewsection">
-			<h2>Edit data</h2>
-			INFOHASH: <input type="text" name="INFOHASH" id="infohashInputField" ><br>
-			Uploader: <input type="text" name="uploader" id="uploaderInputField" ><br>
-			File Type: <input type="text" name="filetype" id="filetypeInputField" ><br>
-			File Quality: <input type="text" name="filequality" id="filequalityInputField" ><br>
-			Title: <input type="text" name="title" id="titleInputField" ><br>
+			<h2 class="centerText">Edit data</h2>
+			INFOHASH: <input type="text" class="textInput" name="INFOHASH" id="infohashInputField" ><br>
+			Uploader: <input type="text" class="textInput" name="uploader" id="uploaderInputField" ><br>
+			File Type: <input type="text" class="textInput" name="filetype" id="filetypeInputField" ><br>
+			File Quality: <input type="text" class="textInput" name="filequality" id="filequalityInputField" ><br>
+			Title: <input type="text" class="textInput" name="title" id="titleInputField" ><br>
 			Description:<br>
-			<textarea name="description" id="descriptionTextArea" rows="10" cols="50"></textarea>
-			<br>
-			<button class="dlButton blue" onClick="updateDocument()">Update/Add</button>
-			<button class="dlButton blue" onClick="deleteDocument()">Delete</button>
-			<button class="dlButton blue" onClick="clearDocument()">Clear</button>
+			<textarea name="description" id="descriptionTextArea" rows="10" cols="40"></textarea>
+			<hr>
+			<div id="editMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="Update" class="active" onclick="updateDocument()">Update/Add</a></li>
+					<li><a href="javascript:void(0)" title="Delete" class="active" onclick="deleteDocument()">Delete</a></li>
+					<li><a href="javascript:void(0)" title="Clear" class="active" onclick="clearDocument()">Clear</a></li>
+				</ul>
+			</div>
 			
 		</div>
 		<div id="tablesection">
-			<button class="dlButton blue" onClick="generateTable()">Documents</button>
-			
+			<div id="tableMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="Generate" class="active" onclick="generateTable()">List Documents</a></li>
+				</ul>
+			</div>
+			<br>
+			<hr>						
 			<div id="datatable" ></div>
+			
 		</div>	
 	</div>
+
+	<div id="containerAdmin">
 	
+	</div>
 	
 </div>
 	
