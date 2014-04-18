@@ -50,6 +50,11 @@ h2 {
 }
 
 #containerEdit {
+	display: block;
+}
+
+#containerAdmin{
+    display: none;
 }
 
 #viewsection {

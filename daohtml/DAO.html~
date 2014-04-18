@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-18T21:12:18+0200" >
+<meta name="date" content="2014-04-18T21:26:42+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -27,17 +27,15 @@ var infohashes = new Array();
 
 window.onload = function(){   
 
+	var list = document.getElementById("adminLinks").style.display = "inline";
+
 <!--
-	var list = document.getElementById("adminLinks");
-
-
     if (list.style.display == "none"){
         list.style.display = "inline";
     }else{
         list.style.display = "none";
     }
 -->
-
 }
 
 switchPage = function(){
