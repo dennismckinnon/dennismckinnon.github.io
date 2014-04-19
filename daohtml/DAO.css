@@ -34,6 +34,12 @@ h2 {
 	width: 245px;
 }
 
+.textInputLevel {
+    position: absolute;
+    left: 110px;
+    width: 40px;
+}
+
 #logo {
 	float: left;
 	background-image: url(./ethereum.png); 
@@ -55,6 +61,22 @@ h2 {
 
 #containerAdmin{
     display: none;
+    height: 160px;
+	 padding:5px 10px;
+	 line-height: 150%;
+    border:2px solid;
+	 border-radius:5px;
+	 border-color: #402e16; 
+}
+
+#containerConsensus{
+    display: none;
+    height: 160px;
+	 padding:5px 10px;
+	 line-height: 150%;
+    border:2px solid;
+	 border-radius:5px;
+	 border-color: #402e16; 
 }
 
 #viewsection {
@@ -201,5 +223,40 @@ text-decoration: none; color: #402e16;
 
 /* another RGBA background, now with an opacity of 0.8 */
 #tableMenu ul li a.active { 
+background: rgb(180,180,225,1.0) !important; 
+}
+
+/* Admin buttons */
+#adminMenu {
+}
+
+
+
+#adminMenu ul { 
+    list-style:none;
+    padding-left: 0;
+    margin-left: 0;
+    
+}
+#adminMenu ul li { 
+    display:inline;
+    float:left;
+}
+
+/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
+#adminMenu ul li a { 
+padding:5px; 
+text-decoration: none; color: #402e16;
+}
+	
+/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
+#adminMenu ul li a:hover 
+{
+	background-color:rgb(150,150,225,0.7) !important;
+	opacity: 0.7;
+}
+
+/* another RGBA background, now with an opacity of 0.8 */
+#adminMenu ul li a.active { 
 background: rgb(180,180,225,1.0) !important; 
 }

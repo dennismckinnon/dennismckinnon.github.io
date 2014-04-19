@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-18T21:51:33+0200" >
+<meta name="date" content="2014-04-19T21:19:02+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -20,44 +20,55 @@
 
 <script>
 
-var dbADDR = key.addressOf("c75c7d153254dfc065000f614f7d0537440ddb5a");
-var adminADDR = key.addressOf("");
+var dougADDR = key.addressOf("");
+var dbADDR = key.addressOf("50ac40647c94efa53c21c9f484817c299d9731a2");
+var adminADDR = key.addressOf("66e1fd57728f5398d73efda6744d22db92c4c7bf");
  
 var infohashes = new Array();
 
 window.onload = function(){   
-
-	var list = document.getElementById("adminLinks").style.display = "inline";
-
-<!--
-    if (list.style.display == "none"){
-        list.style.display = "inline";
-    }else{
-        list.style.display = "none";
-    }
--->
+	
+	var myaddr = u256.fromAddress(key.address(eth.key()));
+	var memStatus = eth.storageAt(adminADDR,myaddr);
+	if(!u256.isNull(memStatus)){
+		var adminVal = u256.toValue(memStatus);
+		if((adminVal & 2) == 2){
+			document.getElementById('infohashInputField').value = adminVal.toString();
+			document.getElementById("adminLinks").style.display = "inline";
+		} else {
+			document.getElementById("adminLinks").style.display = "none";		
+		}
+	} else {
+		document.getElementById("adminLinks").style.display = "none";
+	}
+	
 }
 
-switchPage = function(){
+switchPage = function(callerID){
 
-	var list = document.getElementById("containerEdit");
+   if(callerID == "0"){
+		document.getElementById("containerEdit").style.display = "block";
+		document.getElementById("containerConsensus").style.display = "none";
+		document.getElementById("containerAdmin").style.display = "none";
+	} else if(callerID == "1"){	
+		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerConsensus").style.display = "block";
+		document.getElementById("containerAdmin").style.display = "none";
+	} else if(callerID == "2"){
+		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerConsensus").style.display = "none";
+		document.getElementById("containerAdmin").style.display = "block";
+	}
 
-   if (list.style.display == "none"){
-   	 document.getElementById("containerAdmin").style.display = "none";
-       list.style.display = "block";
-   } else {
-       list.style.display = "none";
-       document.getElementById("containerAdmin").style.display = "block";
-   }
 }
 
 generateTable = function(){
 	
-	var pointer1 = u256.value(16);
-	var pointer2 = u256.value(21);
-	var pointer3 = u256.value(22);
+	var pointer1 = u256.value(32);
+	var pointer2 = u256.value(37);
+	var pointer3 = u256.value(38);
 	
-	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(7)));
+	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(20)));
 	var titles = new Array();
 	infohashes = new Array();
 	
@@ -70,15 +81,14 @@ generateTable = function(){
 		
 		pointer1 = u256.add(pointer1, u256.value(32));
 		pointer2 = u256.add(pointer2, u256.value(32));
-		pointer3 = u256.add(pointer3, u256.value(32)); 
-		
+		pointer3 = u256.add(pointer3, u256.value(32));
 	};
 	
 	var table= "<table>";
 	
 	for (var j = 0; j < titles.length; j++) {
 			table+='<tr><td><a href="javascript:void(0)" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + 
-			j + ':  ' + titles[j] + '</a></td></tr>';
+			(j+1) + ':  ' + titles[j] + '</a></td></tr>';
 	}
 	
 	table+="</table>";
@@ -91,7 +101,7 @@ resolveMagnetLink = function(hashIndex)
 	var index = parseInt(hashIndex);
 	var infohs = infohashes[index];
 	
-	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(6)));
+	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(19)));
 	pointer = eth.storageAt(dbADDR, pointer);
 	
 	pointer = u256.add(pointer, u256.value(2));
@@ -172,6 +182,18 @@ clearDocument = function()
 	document.getElementById('descriptionTextArea').value = "";
 };
 
+addUser = function(){
+	
+}
+
+addAdmin = function(){
+	
+}
+
+updateUserLevel = function(){
+	
+}
+
 </script>
 
 </head>
@@ -183,10 +205,13 @@ clearDocument = function()
 	<h1>Denny's DAO</h1>
 	<div id="menu">
 		<ul>
-			<li><a href="javascript:void(0)" title="Data" onclick="switchPage()">Data Management</a></li>
+			<li><a href="javascript:void(0)" title="Data" onclick="switchPage(0)">Database</a></li>
+		</ul>
+		<ul>
+			<li><a href="javascript:void(0)" title="Consensus" onclick="switchPage(1)">Consensus</a></li>
 		</ul>
 		<ul id="adminLinks">
-			<li><a href="javascript:void(0)" title="Admin" onclick="switchPage()">Admin</a></li>
+			<li><a href="javascript:void(0)" title="Admin" onclick="switchPage(2)">Admin</a></li>
 		</ul>
 	</div>
 	<br><hr style="color:black" />
@@ -225,9 +250,24 @@ clearDocument = function()
 			
 		</div>	
 	</div>
+	
+	<div id="containerConsensus">
+		TODO
+	</div>
 
 	<div id="containerAdmin">
-		Haha...
+		
+		<h2 class="centerText">Admin tools</h2>
+		Address: <input type="text" class="textInput" name="userAddress" id="userAddressInputField" ><br>
+		Level: <input type="text" class="textInputLevel" name="userLevel" id="userLevelInputField" ><br>
+		<hr>
+		<div id="adminMenu">
+			<ul>
+				<li><a href="javascript:void(0)" title="Update" class="active" onclick="addUser">Add User</a></li>
+				<li><a href="javascript:void(0)" title="Delete" class="active" onclick="">Add Admin</a></li>
+				<li><a href="javascript:void(0)" title="Clear" class="active" onclick="">Update User</a></li>
+			</ul>
+		</div>
 	</div>
 	
 </div>
