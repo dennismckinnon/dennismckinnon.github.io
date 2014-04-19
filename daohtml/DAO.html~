@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-19T21:17:28+0200" >
+<meta name="date" content="2014-04-20T01:26:00+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -21,7 +21,7 @@
 <script>
 
 var dougADDR = key.addressOf("");
-var dbADDR = key.addressOf("50ac40647c94efa53c21c9f484817c299d9731a2");
+var dbADDR = key.addressOf("fca4b8f3639897c10005ee062c41c3e3301a84c3");
 var adminADDR = key.addressOf("66e1fd57728f5398d73efda6744d22db92c4c7bf");
  
 var infohashes = new Array();
@@ -31,16 +31,17 @@ window.onload = function(){
 	var myaddr = u256.fromAddress(key.address(eth.key()));
 	var memStatus = eth.storageAt(adminADDR,myaddr);
 	if(!u256.isNull(memStatus)){
-		
 		var adminVal = u256.toValue(memStatus);
 		if((adminVal & 2) == 2){
-			document.getElementById('infohashInputField').value = adminVal.toString();
 			document.getElementById("adminLinks").style.display = "inline";
+		} else {
+			document.getElementById("adminLinks").style.display = "none";		
 		}
 	} else {
 		document.getElementById("adminLinks").style.display = "none";
-		document.getElementById('infohashInputField').value = "not registered: " + (u256.toValue(myaddr)).toString(16);
 	}
+	
+	
 	
 }
 
@@ -61,14 +62,13 @@ switchPage = function(callerID){
 	}
 
 }
-
 generateTable = function(){
 	
 	var pointer1 = u256.value(32);
 	var pointer2 = u256.value(37);
 	var pointer3 = u256.value(38);
 	
-	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(20)));
+	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(21)));
 	var titles = new Array();
 	infohashes = new Array();
 	
@@ -81,7 +81,8 @@ generateTable = function(){
 		
 		pointer1 = u256.add(pointer1, u256.value(32));
 		pointer2 = u256.add(pointer2, u256.value(32));
-		pointer3 = u256.add(pointer3, u256.value(32));
+		pointer3 = u256.add(pointer3, u256.value(32)); 
+		
 	};
 	
 	var table= "<table>";
@@ -101,7 +102,7 @@ resolveMagnetLink = function(hashIndex)
 	var index = parseInt(hashIndex);
 	var infohs = infohashes[index];
 	
-	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(19)));
+	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(20)));
 	pointer = eth.storageAt(dbADDR, pointer);
 	
 	pointer = u256.add(pointer, u256.value(2));
@@ -183,14 +184,45 @@ clearDocument = function()
 };
 
 addUser = function(){
+	var userString = document.getElementById("userAddressInputField").value;
+	if(userString == null || userString == ""){
+		window.alert("No user name has been specified.");
+		return;	
+	}
+	
+	var userBytes = u256.bytesOf(u256.value(parseInt(userString, 16)));
+
+	var command = null;
+	var payload = null;
+
+	if(document.getElementById('userRadio').checked) {
+		
+		command = bytes.fromString("regmem",32);
+		payload = bytes.concat(command,userBytes);
+		document.getElementById("userAddressInputField").value = "regmem";
+	} else {
+		command = bytes.fromString("regadm",32);
+		payload = bytes.concat(command,userBytes);
+		
+		var levelBytes = null;
+		var userLevelString =  document.getElementById("userLevelInputField").value;
+		
+		if(userLevelString != null && userLevelString == ""){
+			levelBytes = u256.bytesOf(u256.value(parseInt(userLevelString, 10)));
+			payload = bytes.concat(payload,levelBytes);
+		}
+		document.getElementById("userAddressInputField").value = "regadm";
+	}
+
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());	
 	
 }
 
-addAdmin = function(){
+removeUser = function(){
 	
 }
 
-updateUserLevel = function(){
+updateUser = function(){
 	
 }
 
@@ -231,7 +263,7 @@ updateUserLevel = function(){
 			<hr>
 			<div id="editMenu">
 				<ul>
-					<li><a href="javascript:void(0)" title="Update" class="active" onclick="updateDocument()">Update/Add</a></li>
+					<li><a href="javascript:void(0)" title="Update" class="active" onclick="updateDocument()">Update/Create</a></li>
 					<li><a href="javascript:void(0)" title="Delete" class="active" onclick="deleteDocument()">Delete</a></li>
 					<li><a href="javascript:void(0)" title="Clear" class="active" onclick="clearDocument()">Clear</a></li>
 				</ul>
@@ -245,7 +277,7 @@ updateUserLevel = function(){
 				</ul>
 			</div>
 			<br>
-			<hr>						
+			<hr>
 			<div id="datatable" ></div>
 			
 		</div>	
@@ -259,13 +291,15 @@ updateUserLevel = function(){
 		
 		<h2 class="centerText">Admin tools</h2>
 		Address: <input type="text" class="textInput" name="userAddress" id="userAddressInputField" ><br>
-		Level: <input type="text" class="textInputLevel" name="userLevel" id="userLevelInputField" ><br>
+		User: <input type="radio" name="userRadio" id="userRadio" checked>
+		Admin: <input type="radio" name="userRadio" id="adminRadio">
+		<div id="userLevelDiv">Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
 		<hr>
 		<div id="adminMenu">
 			<ul>
-				<li><a href="javascript:void(0)" title="Update" class="active" onclick="addUser">Add User</a></li>
-				<li><a href="javascript:void(0)" title="Delete" class="active" onclick="">Add Admin</a></li>
-				<li><a href="javascript:void(0)" title="Clear" class="active" onclick="">Update User</a></li>
+				<li><a href="javascript:void(0)" title="AddUser" class="active" onclick="addUser()">Add User</a></li>
+				<li><a href="javascript:void(0)" title="RemoveUser" class="active" onclick="removeUser()">Remove User</a></li>
+				<li><a href="javascript:void(0)" title="UpdateUser" class="active" onclick="updateUser()">Update User</a></li>
 			</ul>
 		</div>
 	</div>
