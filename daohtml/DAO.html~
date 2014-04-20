@@ -4,7 +4,7 @@
 <title>DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-20T01:26:00+0200" >
+<meta name="date" content="2014-04-20T01:58:35+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -184,13 +184,15 @@ clearDocument = function()
 };
 
 addUser = function(){
+	
 	var userString = document.getElementById("userAddressInputField").value;
+
 	if(userString == null || userString == ""){
 		window.alert("No user name has been specified.");
 		return;	
 	}
 	
-	var userBytes = u256.bytesOf(u256.value(parseInt(userString, 16)));
+	var userBytes = u256.bytesOf(u256.fromAddress(key.addressOf(userString)));
 
 	var command = null;
 	var payload = null;
@@ -199,7 +201,7 @@ addUser = function(){
 		
 		command = bytes.fromString("regmem",32);
 		payload = bytes.concat(command,userBytes);
-		document.getElementById("userAddressInputField").value = "regmem";
+		
 	} else {
 		command = bytes.fromString("regadm",32);
 		payload = bytes.concat(command,userBytes);
@@ -207,18 +209,36 @@ addUser = function(){
 		var levelBytes = null;
 		var userLevelString =  document.getElementById("userLevelInputField").value;
 		
-		if(userLevelString != null && userLevelString == ""){
+		if(userLevelString != null && userLevelString != ""){
 			levelBytes = u256.bytesOf(u256.value(parseInt(userLevelString, 10)));
 			payload = bytes.concat(payload,levelBytes);
 		}
-		document.getElementById("userAddressInputField").value = "regadm";
+		
 	}
 
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());	
+	eth.transact(key.secret(eth.key()), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());	
 	
 }
 
 removeUser = function(){
+	var userString = document.getElementById("userAddressInputField").value;
+
+	if(userString == null || userString == ""){
+		window.alert("No user name has been specified.");
+		return;
+	}
+	
+	var sure = confirm("Are you sure you want to delete member: " + userString + "?");	
+	if(!sure){
+		window.alert("User was not removed");
+		return;	
+	}
+	var userBytes = u256.bytesOf(u256.fromAddress(key.addressOf(userString)));
+		
+	var command = bytes.fromString("delmem",32);
+	var payload = bytes.concat(command,userBytes);
+
+	eth.transact(key.secret(eth.key()), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());	
 	
 }
 
