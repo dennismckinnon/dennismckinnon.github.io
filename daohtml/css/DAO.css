@@ -2,7 +2,7 @@
 /* Misc */
 body {
 	font-family: Sniglet;
-	background-image: url(./congruent_outline.png); 
+	background-image: url(../img/congruent_outline.png); 
 	background-repeat: repeat;
 }
 h1 {
@@ -42,7 +42,8 @@ h2 {
 
 #logo {
 	float: left;
-	background-image: url(./ethereum.png); 
+	margin-right: 20px;
+	background-image: url(../img/ethereum.png); 
 	background-repeat: no-repeat;
 	height: 67px;
 	width: 43px;
@@ -242,7 +243,6 @@ background: rgb(180,180,225,1.0) !important;
     list-style:none;
     padding-left: 0;
     margin-left: 0;
-    
 }
 #adminMenu ul li { 
     display:inline;
@@ -273,4 +273,51 @@ background: rgb(180,180,225,1.0) !important;
 
 #userLevelInputField{
 	width: 40px;
+}
+
+#userTableSection {
+	position: absolute;
+	padding: 5px 10px;
+	margin-left: 0;
+	margin-top: 10px;
+	border:2px solid;
+	border-radius:5px;
+	border-color: #402e16;
+	top: 320px;
+	left: 8px;
+}
+
+/* The table */
+
+#userTable {
+	margin:0px;padding:0px;
+	width:100%;
+}
+
+#userTable table{
+    border-collapse: collapse;
+        border-spacing: 0;
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+}
+
+#userTable table td {
+	width: 120px;	
+}
+
+#userTable tr:first-child td {
+	font-size: 120%;
+	color: #224422;
+}
+
+#userTable a {
+    color: #00a;
+    text-decoration: none;
+}
+
+#userTable a:hover {
+    color: #22c;   
+    text-decoration: none;
 }
