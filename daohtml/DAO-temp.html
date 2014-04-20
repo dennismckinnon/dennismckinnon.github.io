@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DAO</title>
+<meta name="generator" content="Bluefish 2.2.5" >
+<meta name="author" content="Androlo" >
+<meta name="date" content="2014-04-19T21:19:02+0200" >
+<meta name="copyright" content="">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta http-equiv="expires" content="0">
+<link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
+
+<link href="DAO.css" rel="stylesheet" type="text/css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script>
+
+var dougADDR = key.addressOf("6207fbebac090bab3c91d4de0f4264b3338982b9");
+
+var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
+
+var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
+var dtt = u256.toValue(dougTEST);
+var dat = u256.toValue(u256.fromAddress(dougADDR));
+
+while (dtt != dat){
+	dougADDR = u256.toAddress(dougTEST)
+	dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
+	dtt = u256.toValue(dougTEST);
+	dat = u256.toValue(u256.fromAddress(dougADDR));
+};
+
+var dbADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
+var adminADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
+
+var infohashes = new Array();
+
+window.onload = function(){   
+	
+	var myaddr = u256.fromAddress(key.address(eth.key()));
+	var memStatus = eth.storageAt(adminADDR,myaddr);
+	if(!u256.isNull(memStatus)){
+		var adminVal = u256.toValue(memStatus);
+		if((adminVal & 2) == 2){
+			document.getElementById('infohashInputField').value = adminVal.toString();
+			document.getElementById("adminLinks").style.display = "inline";
+		} else {
+			document.getElementById("adminLinks").style.display = "none";		
+		}
+	} else {
+		document.getElementById("adminLinks").style.display = "none";
+	}
+	
+}
+
+switchPage = function(callerID){
+
+   if(callerID == "0"){
+		document.getElementById("containerEdit").style.display = "block";
+		document.getElementById("containerConsensus").style.display = "none";
+		document.getElementById("containerAdmin").style.display = "none";
+	} else if(callerID == "1"){	
+		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerConsensus").style.display = "block";
+		document.getElementById("containerAdmin").style.display = "none";
+	} else if(callerID == "2"){
+		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerConsensus").style.display = "none";
+		document.getElementById("containerAdmin").style.display = "block";
+	}
+
+}
+generateTable = function(){
+	
+	var pointer1 = u256.value(32);
+	var pointer2 = u256.value(37);
+	var pointer3 = u256.value(38);
+	
+	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(21)));
+	var titles = new Array();
+	infohashes = new Array();
+	
+	for (var i = 0; i < limit; i++) {
+		
+		var tstr = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer2)));
+		tstr = tstr + bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer3)));
+		titles[i] = tstr;
+		infohashes[i] = eth.storageAt(dbADDR, pointer1);
+		
+		pointer1 = u256.add(pointer1, u256.value(32));
+		pointer2 = u256.add(pointer2, u256.value(32));
+		pointer3 = u256.add(pointer3, u256.value(32)); 
+		
+	};
+	
+	var table= "<table>";
+	
+	for (var j = 0; j < titles.length; j++) {
+			table+='<tr><td><a href="javascript:void(0)" onclick="resolveMagnetLink(' + '&quot;' + j + '&quot;' + ');">' + 
+			(j+1) + ':  ' + titles[j] + '</a></td></tr>';
+	}
+	
+	table+="</table>";
+	document.getElementById('datatable').innerHTML = table;
+	
+}
+
+resolveMagnetLink = function(hashIndex)
+{
+	var index = parseInt(hashIndex);
+	var infohs = infohashes[index];
+	
+	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(20)));
+	pointer = eth.storageAt(dbADDR, pointer);
+	
+	pointer = u256.add(pointer, u256.value(2));
+	
+	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+	
+	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+	
+	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+	
+	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	pointer = u256.add(pointer, u256.value(1));
+	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	var title = title1 + title2;
+	
+	var desc = "";
+	for (var i = 0; i < 25; i++) {
+		pointer = u256.add(pointer, u256.value(1));
+		var temp = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+		desc = desc + temp;
+	}
+	
+	document.getElementById('infohashInputField').value = (u256.toValue(infohs)).toString(16);
+	document.getElementById('uploaderInputField').value = uploader;
+	document.getElementById('filetypeInputField').value = filetype;
+	document.getElementById('filequalityInputField').value = filequality;
+	document.getElementById('titleInputField').value = title;
+	document.getElementById('descriptionTextArea').value = desc;
+	
+}
+
+updateDocument = function()
+{
+	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
+	var title = bytes.fromString(document.getElementById("titleInputField").value, 64);
+	var uploader = bytes.fromString(document.getElementById("uploaderInputField").value, 32);
+	var filetype = bytes.fromString(document.getElementById("filetypeInputField").value, 32);
+	var filequality = bytes.fromString(document.getElementById("filequalityInputField").value, 32);
+	var descript = bytes.fromString(document.getElementById("descriptionTextArea").value, 800);
+	
+	var indicator = u256.bytesOf(u256.value(parseInt("111111", 16)));
+	var command = bytes.fromString("moddbe",32);
+	
+	var payload = command;
+	payload = bytes.concat(payload, infohash);
+	payload = bytes.concat(payload, indicator);
+	payload = bytes.concat(payload, uploader);
+	payload = bytes.concat(payload, filetype);
+	payload = bytes.concat(payload, filequality);
+	payload = bytes.concat(payload, title);
+	payload = bytes.concat(payload, descript);
+	
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());
+
+};
+
+deleteDocument = function()
+{
+	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
+	var command = bytes.fromString("deldbe",32);
+
+	var payload = bytes.concat(command,infohash);
+
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());	
+	clearDocument();
+};
+
+clearDocument = function()
+{
+	document.getElementById('infohashInputField').value = "";
+	document.getElementById('uploaderInputField').value = "";
+	document.getElementById('filetypeInputField').value = "";
+	document.getElementById('filequalityInputField').value = "";
+	document.getElementById('titleInputField').value = "";
+	document.getElementById('descriptionTextArea').value = "";
+};
+
+addUser = function(){
+	
+}
+
+addAdmin = function(){
+	
+}
+
+updateUserLevel = function(){
+	
+}
+
+</script>
+
+</head>
+<body>
+Test: <span id="test"></span>
+<div id="header">
+	<div id="logo"></div>
+	
+	<h1>Denny's DAO</h1>
+	<div id="menu">
+		<ul>
+			<li><a href="javascript:void(0)" title="Data" onclick="switchPage(0)">Database</a></li>
+		</ul>
+		<ul>
+			<li><a href="javascript:void(0)" title="Consensus" onclick="switchPage(1)">Consensus</a></li>
+		</ul>
+		<ul id="adminLinks">
+			<li><a href="javascript:void(0)" title="Admin" onclick="switchPage(2)">Admin</a></li>
+		</ul>
+	</div>
+	<br><hr style="color:black" />
+</div>
+
+<div>
+	<div id="containerEdit">
+		<div id="viewsection">
+			<h2 class="centerText">Edit data</h2>
+			INFOHASH: <input type="text" class="textInput" name="INFOHASH" id="infohashInputField" ><br>
+			Uploader: <input type="text" class="textInput" name="uploader" id="uploaderInputField" ><br>
+			File Type: <input type="text" class="textInput" name="filetype" id="filetypeInputField" ><br>
+			File Quality: <input type="text" class="textInput" name="filequality" id="filequalityInputField" ><br>
+			Title: <input type="text" class="textInput" name="title" id="titleInputField" ><br>
+			Description:<br>
+			<textarea name="description" id="descriptionTextArea" rows="10" cols="40"></textarea>
+			<hr>
+			<div id="editMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="Update" class="active" onclick="updateDocument()">Update/Add</a></li>
+					<li><a href="javascript:void(0)" title="Delete" class="active" onclick="deleteDocument()">Delete</a></li>
+					<li><a href="javascript:void(0)" title="Clear" class="active" onclick="clearDocument()">Clear</a></li>
+				</ul>
+			</div>
+			
+		</div>
+		<div id="tablesection">
+			<div id="tableMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="Generate" class="active" onclick="generateTable()">List Documents</a></li>
+				</ul>
+			</div>
+			<br>
+			<hr>						
+			<div id="datatable" ></div>
+			
+		</div>	
+	</div>
+	
+	<div id="containerConsensus">
+		TODO
+	</div>
+
+	<div id="containerAdmin">
+		
+		<h2 class="centerText">Admin tools</h2>
+		Address: <input type="text" class="textInput" name="userAddress" id="userAddressInputField" ><br>
+		Level: <input type="text" class="textInputLevel" name="userLevel" id="userLevelInputField" ><br>
+		<hr>
+		<div id="adminMenu">
+			<ul>
+				<li><a href="javascript:void(0)" title="Update" class="active" onclick="addUser">Add User</a></li>
+				<li><a href="javascript:void(0)" title="Delete" class="active" onclick="">Add Admin</a></li>
+				<li><a href="javascript:void(0)" title="Clear" class="active" onclick="">Update User</a></li>
+			</ul>
+		</div>
+	</div>
+	
+</div>
+	
+</body>
+</html>
