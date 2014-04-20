@@ -20,9 +20,23 @@
 
 <script>
 
-var dougADDR = key.addressOf("");
-var dbADDR = key.addressOf("fca4b8f3639897c10005ee062c41c3e3301a84c3");
-var adminADDR = key.addressOf("66e1fd57728f5398d73efda6744d22db92c4c7bf");
+var dougADDR = key.addressOf("6207fbebac090bab3c91d4de0f4264b3338982b9");
+
+var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
+
+var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
+var dtt = u256.toValue(dougTEST);
+var dat = u256.toValue(u256.fromAddress(dougADDR));
+
+while (dtt != dat){
+	dougADDR = u256.toAddress(dougTEST)
+	dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
+	dtt = u256.toValue(dougTEST);
+	dat = u256.toValue(u256.fromAddress(dougADDR));
+};
+
+var dbADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
+var adminADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
  
 var infohashes = new Array();
 
