@@ -4,7 +4,7 @@
 <title>Denny's DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-20T17:05:57+0200" >
+<meta name="date" content="2014-04-21T12:06:34+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -35,10 +35,10 @@
 			<li><a href="javascript:void(0)" title="Consensus" onclick="switchPage(1)">Consensus</a></li>
 		</ul>
 		<ul>
-			<li><a href="javascript:void(0)" title="About" onclick="about()">About</a></li>
+			<li><a href="javascript:void(0)" title="About" onclick="switchPage(2)">About</a></li>
 		</ul>
 		<ul id="adminLinks">
-			<li><a class="adminLink" href="javascript:void(0)" title="Admin" onclick="switchPage(2)">Admin</a></li>
+			<li><a class="adminLink" href="javascript:void(0)" title="Admin" onclick="switchPage(3)">Admin</a></li>
 		</ul>
 		
 		<ul>
@@ -83,6 +83,28 @@
 	<div id="containerConsensus">
 		TODO
 	</div>
+	
+	<div id="containerAbout">
+		<div id="aboutText">
+			<p class="aboutTextHeader">Denny's DAO</p>
+			<br>
+			<p class="aboutTextBread">
+			This is a DAO (Decentralized Autonomous Organization). It allows you to  
+			create a decentralized, democratically run organization. A DAO uses 
+			peer-to-peer communication to share information between members. The actual  
+			handling of information (adding blog posts, updating a forum thread, changing  
+			a nickname, etc.) is done through the Ethereum client. The Ethereum client makes 
+			sure that everyone's local data is kept in sync, that it is kept current, 
+			and that all attempts to change the information are valid (in accordance with the 
+			agreed-upon rules).
+			</p>
+			<p class="aboutTextBread">
+			DAO's can have many different rules. They do not even have to be democratically 
+			run. Rules are updated and kept current by the same mechanisms that processes the 
+			other information.
+			</p>
+		</div>
+	</div>
 
 	<div id="containerAdmin">
 		
@@ -90,7 +112,7 @@
 		Address: <input type="text" class="textInput" name="userAddress" id="userAddressInputField" ><br>
 		User: <input type="radio" name="userRadio" id="userRadio" checked>
 		Admin: <input type="radio" name="userRadio" id="adminRadio">
-		<div id="userLevelDiv">Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
+		<div id="userLevelDiv">Super Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
 		<hr>
 		<div id="adminMenu">
 			<ul>
@@ -111,6 +133,8 @@
 			
 		</div>	
 	</div>
+	
+	
 	
 </div>
 	

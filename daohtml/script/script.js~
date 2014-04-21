@@ -292,5 +292,5 @@ resolveUserLink = function(userName)
 	} else {
 		document.getElementById('userLevelInputField').value = "";
 	}
-	
+	document.getElementById('adminRadio').checked = true;
 }
