@@ -1,0 +1,36 @@
+#containerAbout{
+    display: none;
+	 padding:5px 10px;
+	 padding-top: 50px;
+	 line-height: 150%;
+    border:2px solid;
+	 border-radius:5px;
+	 border-color: #402e16;
+	 background-image: url(../img/SchoolOfAthensWB.png);
+	 width: 600px;
+	 height: 410px;
+}
+
+#aboutText {
+	width: 70%;
+	height: 60%;
+	margin: 0 auto;
+	line-height: 100%;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 5px;
+	border:2px solid;
+	border-radius:5px;
+	border-color: rgba(20,20,20,0.7);
+	background-color: rgba(230,230,230,0.7);
+}
+
+.aboutTextHeader {
+	font-weight: bold;
+	font-size: 130%;
+	display: inline;
+}
+
+.aboutTextBread {
+	font-size: 90%;
+}

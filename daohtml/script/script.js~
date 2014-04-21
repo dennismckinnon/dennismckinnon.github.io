@@ -40,21 +40,25 @@ switchPage = function(callerID){
    if(callerID == "0"){
 		document.getElementById("containerEdit").style.display = "block";
 		document.getElementById("containerConsensus").style.display = "none";
+		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "none";
 	} else if(callerID == "1"){	
 		document.getElementById("containerEdit").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "block";
+		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "none";
 	} else if(callerID == "2"){
 		document.getElementById("containerEdit").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "none";
+		document.getElementById("containerAbout").style.display = "block";
+		document.getElementById("containerAdmin").style.display = "none";
+	} else if(callerID == "3"){
+		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerConsensus").style.display = "none";
+		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "block";
 	}
 
-}
-
-about = function(){
-	window.alert("Denny's Autonomous Organization.\n\nIt cannot be reined in.\n\nThe revolution is coming.");
 }
 
 generateTable = function(){

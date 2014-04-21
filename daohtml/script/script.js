@@ -38,22 +38,22 @@ window.onload = function(){
 switchPage = function(callerID){
 
    if(callerID == "0"){
-		document.getElementById("containerEdit").style.display = "block";
+		document.getElementById("containerDatabase").style.display = "block";
 		document.getElementById("containerConsensus").style.display = "none";
 		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "none";
 	} else if(callerID == "1"){	
-		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerDatabase").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "block";
 		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "none";
 	} else if(callerID == "2"){
-		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerDatabase").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "none";
 		document.getElementById("containerAbout").style.display = "block";
 		document.getElementById("containerAdmin").style.display = "none";
 	} else if(callerID == "3"){
-		document.getElementById("containerEdit").style.display = "none";
+		document.getElementById("containerDatabase").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "none";
 		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "block";

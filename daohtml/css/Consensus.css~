@@ -1,0 +1,10 @@
+#containerConsensus{
+    display: none;
+    width: 600px;
+	 padding:5px 10px;
+	 line-height: 150%;
+    border:2px solid;
+	 border-radius:5px;
+	 border-color: #402e16;
+	 
+}

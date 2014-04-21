@@ -16,7 +16,8 @@ h2 {
 	
 }
 
- hr {
+hr {
+ 	display: block;
   	border: 0;
   	width: 100%;
   	color: #000;
@@ -40,6 +41,15 @@ h2 {
     width: 40px;
 }
 
+/* Header stuff */
+
+#header {
+	display: block;
+	padding:10px;
+	height: 136px;
+	width: 600px;
+}
+
 #logo {
 	float: left;
 	margin-right: 20px;
@@ -49,124 +59,7 @@ h2 {
 	width: 43px;
 }​
 
-/* Divs */
 
-#header {
-	padding:10px;
-	height: 136px;
-}
-
-#containerEdit {
-	display: block;
-}
-
-#containerConsensus{
-    display: none;
-    height: 160px;
-	 padding:5px 10px;
-	 line-height: 150%;
-    border:2px solid;
-	 border-radius:5px;
-	 border-color: #402e16;
-	 
-}
-
-#containerAbout{
-    display: none;
-    height: 160px;
-	 padding:5px 10px;
-	 padding-top: 50px;
-	 line-height: 150%;
-    border:2px solid;
-	 border-radius:5px;
-	 border-color: #402e16;
-	 background-image: url(../img/SchoolOfAthensWB.png);
-	 width: 600px;
-	 height: 410px;
-}
-
-#aboutText {
-	width: 70%;
-	height: 70%;
-	margin: 0 auto;
-	line-height: 100%;
-	padding-left: 5px;
-	padding-right: 5px;
-	padding-top: 5px;
-	border:2px solid;
-	border-radius:5px;
-	border-color: rgba(20,20,20,0.7);
-	background-color: rgba(200,200,200,0.7);
-}
-
-.aboutTextHeader {
-	font-weight: bold;
-	font-size: 130%;
-	display: inline;
-}
-
-.aboutTextBread {
-	font-size: 90%;
-}
-
-#containerAdmin{
-    display: none;
-    height: 167px;
-	 padding:5px 10px;
-	 line-height: 150%;
-    border:2px solid;
-	 border-radius:5px;
-	 border-color: #402e16;
-}
-
-
-
-#viewsection {
-	float: left;
-	height: 480px;
-	padding:5px 10px;
-	margin-top: 10px;
-	margin-right: 10px;
-	line-height: 150%;
-	border:2px solid;
-	border-radius:5px;
-	border-color: #402e16;
-}
-
-#tablesection {
-	float: left;
-	padding:5px 10px;
-	margin-top: 10px;
-	border:2px solid;
-	border-radius:5px;
-	border-color: #402e16;
-}
-
-/* The table */
-
-#datatable {
-	margin:0px;padding:0px;
-	width:100%;
-}
-
-#datatable table{
-    border-collapse: collapse;
-        border-spacing: 0;
-	width:100%;
-	height:100%;
-	margin:0px;
-	padding:0px;
-}
-
-#datatable a {
-    color: #00a;
-    text-decoration: none;
-}
-
-#datatable a:hover {
-    color: #22c;   
-    text-decoration: none;
-}
 
 /* The menu */
 #menu {  
@@ -204,161 +97,6 @@ h2 {
 	color: #aa2222;
 }
 
-/* Edit buttons */
-#editMenu {
-}
-
-#editMenu ul { 
-    list-style:none;
-    padding-left: 0;
-    margin-left: 0;
-}
-#editMenu ul li { 
-    display:inline;
-    float:left;
-    margin-right: 10px;
-}
-
-/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
-#editMenu ul li a { 
-padding:5px; 
-background: rgba(220,220,255); 
-text-decoration: none; color: #402e16;
-	text-shadow: #eee 0px 0px 2px; 
-}
-	
-/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
-#editMenu ul li a:hover 
-{
-	background-color:rgb(150,150,225,0.7) !important;
-	opacity: 0.7;
-}
-
-/* another RGBA background, now with an opacity of 0.8 */
-#editMenu ul li a.active { 
-background: rgb(180,180,225,1.0) !important; 
-}
-
-/* Table buttons */
-#tableMenu {
-}
 
 
 
-#tableMenu ul { 
-    list-style:none;
-    padding-left: 0;
-    margin-left: 0;
-    
-}
-#tableMenu ul li { 
-    display:inline;
-    float:left;
-}
-
-/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
-#tableMenu ul li a { 
-padding:5px; 
-text-decoration: none; color: #402e16;
-}
-	
-/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
-#tableMenu ul li a:hover 
-{
-	background-color:rgb(150,150,225,0.7) !important;
-	opacity: 0.7;
-}
-
-/* another RGBA background, now with an opacity of 0.8 */
-#tableMenu ul li a.active { 
-background: rgb(180,180,225,1.0) !important; 
-}
-
-/* Admin buttons */
-#adminMenu {
-}
-
-
-
-#adminMenu ul { 
-    list-style:none;
-    padding-left: 0;
-    margin-left: 0;
-}
-#adminMenu ul li { 
-    display:inline;
-    float:left;
-}
-
-/* background color set to RGBA, with opacity on 0.3 and also using text-shadow */
-#adminMenu ul li a { 
-padding:5px; 
-text-decoration: none; color: #402e16;
-}
-	
-/* hover state shows a linear gradient and opacity it brought down to 0.9 and also shows a very slight grey gradient on top */
-#adminMenu ul li a:hover 
-{
-	background-color:rgb(150,150,225,0.7) !important;
-	opacity: 0.7;
-}
-
-/* another RGBA background, now with an opacity of 0.8 */
-#adminMenu ul li a.active { 
-background: rgb(180,180,225,1.0) !important; 
-}
-
-#userLevelDiv{
-	display: inline;
-}
-
-#userLevelInputField{
-	width: 40px;
-}
-
-#userTableSection {
-	position: absolute;
-	padding: 5px 10px;
-	margin-left: 0;
-	margin-top: 10px;
-	border:2px solid;
-	border-radius:5px;
-	border-color: #402e16;
-	top: 320px;
-	left: 8px;
-}
-
-/* The table */
-
-#userTable {
-	margin:0px;padding:0px;
-	width:100%;
-}
-
-#userTable table{
-    border-collapse: collapse;
-        border-spacing: 0;
-	width:100%;
-	height:100%;
-	margin:0px;
-	padding:0px;
-}
-
-#userTable table td {
-	width: 120px;	
-}
-
-#userTable tr:first-child td {
-	font-size: 120%;
-	color: #224422;
-}
-
-#userTable a {
-    color: #00a;
-    text-decoration: none;
-}
-
-#userTable a:hover {
-    color: #22c;   
-    text-decoration: none;
-}

@@ -4,7 +4,7 @@
 <title>Denny's DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-21T12:06:52+0200" >
+<meta name="date" content="2014-04-21T16:19:27+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -16,6 +16,10 @@
 
 <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
 <link href="css/DAO.css" rel="stylesheet" type="text/css">
+<link href="css/Database.css" rel="stylesheet" type="text/css">
+<link href="css/Consensus.css" rel="stylesheet" type="text/css">
+<link href="css/About.css" rel="stylesheet" type="text/css">
+<link href="css/Admin.css" rel="stylesheet" type="text/css">
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="script/script.js"></script>
@@ -47,7 +51,7 @@
 </div>
 
 <div>
-	<div id="containerEdit">
+	<div id="containerDatabase">
 		<div id="viewsection">
 			<h2 class="centerText">Edit data</h2>
 			INFOHASH: <input type="text" class="textInput" name="INFOHASH" id="infohashInputField" ><br>
@@ -60,9 +64,9 @@
 			<hr>
 			<div id="editMenu">
 				<ul>
-					<li><a href="javascript:void(0)" title="Update" class="active" onclick="updateDocument()">Update/Create</a></li>
-					<li><a href="javascript:void(0)" title="Delete" class="active" onclick="deleteDocument()">Delete</a></li>
-					<li><a href="javascript:void(0)" title="Clear" class="active" onclick="clearDocument()">Clear</a></li>
+					<li><a href="javascript:void(0)" title="Update" onclick="updateDocument()">Update/Create</a></li>
+					<li><a href="javascript:void(0)" title="Delete" onclick="deleteDocument()">Delete</a></li>
+					<li><a href="javascript:void(0)" title="Clear"  onclick="clearDocument()">Clear</a></li>
 				</ul>
 			</div>
 			
@@ -91,12 +95,12 @@
 			<p class="aboutTextBread">
 			This is a DAO (Decentralized Autonomous Organization). It allows you to  
 			create a decentralized, democratically run organization. A DAO uses 
-			peer-to-peer communication to share information between members. The actual  
-			handling of information (adding blog posts, updating a forum thread, changing  
+			peer-to-peer communication for information sharing. The management and   
+			processing of information (adding blog posts, updating a forum thread, changing  
 			a nickname, etc.) is done through the Ethereum client. The Ethereum client makes 
-			sure that everyone's local data is kept in sync, that it is kept current, 
-			and that all changes the information are valid (in accordance with the 
-			agreed-upon rules).
+			sure that everyone's local data is synchronized with the rest of the network. It
+			also makes sure that all changes to the data are done in accordance with the 
+			agreed-upon rules.
 			</p>
 			<p class="aboutTextBread">
 			DAO's can have many different rules. They do not even have to be democratically 
@@ -107,19 +111,20 @@
 	</div>
 
 	<div id="containerAdmin">
-		
-		<h2 class="centerText">Admin tools</h2>
-		Address: <input type="text" class="textInput" name="userAddress" id="userAddressInputField" ><br>
-		User: <input type="radio" name="userRadio" id="userRadio" checked>
-		Admin: <input type="radio" name="userRadio" id="adminRadio">
-		<div id="userLevelDiv">Super Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
-		<hr>
-		<div id="adminMenu">
-			<ul>
-				<li><a href="javascript:void(0)" title="AddUser" class="active" onclick="addUser()">Add User</a></li>
-				<li><a href="javascript:void(0)" title="RemoveUser" class="active" onclick="removeUser()">Remove User</a></li>
-				<li><a href="javascript:void(0)" title="UpdateUser" class="active" onclick="updateUser()">Update User</a></li>
-			</ul>
+		<div id="adminEditSection">
+			<h2 class="centerText">Admin tools</h2>
+			Address: <input type="text" name="userAddress" id="userAddressInputField" ><br>
+			User: <input type="radio" name="userRadio" id="userRadio" checked>
+			Admin: <input type="radio" name="userRadio" id="adminRadio">
+			<div id="userLevelDiv">Super Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
+			<hr>
+			<div id="adminMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="AddUser" class="active" onclick="addUser()">Add User</a></li>
+					<li><a href="javascript:void(0)" title="RemoveUser" class="active" onclick="removeUser()">Remove User</a></li>
+					<li><a href="javascript:void(0)" title="UpdateUser" class="active" onclick="updateUser()">Update User</a></li>
+				</ul>
+			</div>
 		</div>
 		<div id="userTableSection">
 			<div id="adminMenu">
@@ -133,7 +138,6 @@
 			
 		</div>	
 	</div>
-	
 	
 	
 </div>

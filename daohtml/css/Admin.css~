@@ -1,0 +1,107 @@
+#containerAdmin{
+	display: none;
+   width: 600px;
+}
+
+#adminEditSection {
+	width: 430px;
+	height: 170px;
+	padding:5px 10px;
+	line-height: 150%;
+   border:2px solid;
+	border-radius:5px;
+	border-color: #402e16;
+}
+
+#userAddressInputField {
+	position: absolute;
+	left:90px;
+	top: 227px;
+	width: 355px;
+}
+
+
+#userLevelDiv{
+	display: inline;
+}
+
+#userLevelInputField{
+	margin-left: 5px;
+	width: 40px;
+}
+
+/* Admin buttons */
+#adminMenu {
+}
+
+#adminMenu ul { 
+    list-style:none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+#adminMenu ul li { 
+    display:inline;
+    float:left;
+}
+
+#adminMenu ul li a { 
+padding:5px; 
+text-decoration: none; color: #402e16;
+}
+	
+#adminMenu ul li a:hover 
+{
+	background-color:rgb(150,150,225,0.7) !important;
+	opacity: 0.7;
+}
+
+#adminMenu ul li a.active { 
+background: rgb(180,180,225,1.0) !important; 
+}
+
+#userTableSection {
+	position: absolute;
+	padding: 5px 10px;
+	margin-left: 0;
+	margin-top: 10px;
+	border:2px solid;
+	border-radius:5px;
+	border-color: #402e16;
+	top: 345px;
+	left: 8px;
+}
+
+/* The user table */
+#userTable {
+	margin:0px;padding:0px;
+	width:100%;
+}
+
+#userTable table{
+    border-collapse: collapse;
+        border-spacing: 0;
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+}
+
+#userTable table td {
+	width: 120px;	
+}
+
+#userTable tr:first-child td {
+	font-size: 120%;
+	color: #224422;
+}
+
+#userTable a {
+    color: #00a;
+    text-decoration: none;
+}
+
+#userTable a:hover {
+    color: #22c;   
+    text-decoration: none;
+}
