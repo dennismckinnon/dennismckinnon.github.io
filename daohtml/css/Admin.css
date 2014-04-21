@@ -5,7 +5,7 @@
 
 #adminEditSection {
 	width: 470px;
-	height: 170px;
+	height: 193px;
 	padding:5px 10px;
 	line-height: 150%;
    border:2px solid;
@@ -13,10 +13,17 @@
 	border-color: #402e16;
 }
 
+#userNicknameInputField {
+	position: absolute;
+	left: 100px;
+	top: 227px;
+	width: 250px;
+}
+
 #userAddressInputField {
 	position: absolute;
-	left:90px;
-	top: 227px;
+	left: 100px;
+	top: 251px;
 	width: 395px;
 }
 
@@ -68,7 +75,7 @@ background: rgb(180,180,225,1.0) !important;
 	border:2px solid;
 	border-radius:5px;
 	border-color: #402e16;
-	top: 345px;
+	top: 368px;
 	left: 8px;
 }
 

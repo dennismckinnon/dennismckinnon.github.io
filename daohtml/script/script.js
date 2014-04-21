@@ -15,6 +15,8 @@ while (dtt != dat){
 
 var dbADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
 var adminADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
+
+var nickADDR = key.addressOf("d1e41bc09b8e23c6c857fefc0a87b3e202afb6fc");
  
 var infohashes = new Array();
 
@@ -33,7 +35,6 @@ window.onload = function(){
 		document.getElementById("adminLinks").style.display = "none";
 	}
 }
-
 
 switchPage = function(callerID){
 
@@ -62,7 +63,7 @@ switchPage = function(callerID){
 }
 
 generateTable = function(){
-	
+
 	var pointer1 = u256.value(32);
 	var pointer2 = u256.value(37);
 	var pointer3 = u256.value(38);
@@ -93,7 +94,7 @@ generateTable = function(){
 	
 	table+="</table>";
 	document.getElementById('datatable').innerHTML = table;
-	
+
 }
 
 resolveMagnetLink = function(hashIndex)
@@ -247,20 +248,78 @@ updateUser = function(){
 
 generateUserTable = function(){
 	
-	<!-- This is the address where the the admin list starts -->
+	var pointer = u256.value(18); // Tail
+	// Size of the linked list.
+	var size = u256.toValue(eth.storageAt(nickADDR, u256.value(17)));
+	var nicks = new Array();
+	var addrii = new Array(); // Deal with it
+	var userTypes = new Array();
+	
+	// We need to jump past the tail, as it is only the contract nick.	
+	// pointer = eth.storageAt(nickADDR, pointer);
+	// pointer = u256.add(pointer, u256.value(2));
+	
+	// We're essentially reading the list from element 1 and onwards (not from element 0).
+	for (var i = 0; i < size; i++) {
+		pointer = eth.storageAt(nickADDR, pointer);
+		var nick = bytes.toString(u256.bytesOf(pointer));
+		nicks[i] = nick;
+		// Get the address of the user.
+		addrii[i] = eth.storageAt(nickADDR,pointer);
+		pointer = u256.add(pointer, u256.value(2));
+	};
+	
+	for (var i = 0; i < nicks.length; i++) {
+		var userLevel256 = eth.storageAt(adminADDR, addrii[i])
+		if(!u256.isNull(userLevel256)){
+			userTypes[i] = u256.toValue(userLevel256);
+			document.getElementById('userAddressInputField').value = userTypes[i].toString();			
+		} else {
+			userTypes[i] = 0;
+		}
+	};
+	
+	var table= "<table><tr><td>Nickname</td><td>Type</td></tr>";
+	
+	for (var j = 0; j < nicks.length; j++) {
+		var userTypeStr = null;
+		switch(userTypes[j])
+		{
+			case 0:
+		  		userTypeStr = "Squatter";
+		  		break;
+			case 1:
+		  		userTypeStr = "Member";
+				break;
+			case 3:
+		  		userTypeStr = "Admin";
+		  		break;
+			default:
+			  userTypeStr = "Um...";
+		}
+		table+='<tr><td><a href="javascript:void(0)" onclick="resolveMagnetLink(' + '&quot;' + 
+		addrii[j] + ':' + userTypes[j].toString() + '&quot;' + ');">' + j.toString() + ':  ' + nicks[j] + 
+		'</a></td><td>' + userTypeStr + '</td></tr>';
+	}
+	
+	table+="</table>";
+	document.getElementById('userTable').innerHTML = table;
+	
+	/*
+	// This is the address where the the admin list starts
 	var startAddr = eth.storageAt(adminADDR,u256.value(19));
 	var startPos = parseInt(u256.toValue(startAddr));
 	
-	<!-- This is the address where the list of super admins ends -->
+	// This is the address where the list of super admins ends
 	var superAdminNumber = u256.toValue(eth.storageAt(adminADDR,u256.value(18)));
 	superAdminNumber = parseInt(superAdminNumber);
-	<!-- We subtract the address where the admin list start to see how many super admins there are -->
+	// We subtract the address where the admin list start to see how many super admins there are
 	superAdminNumber -= startPos; 
 	
-	<!-- This is the address where the next admin will be added -->
+	// This is the address where the next admin will be added 
 	var lastAdmin = eth.storageAt(adminADDR, u256.value(17));
 	
-	<!-- This is the total number of admins -->
+	// This is the total number of admins
 	var numAdmins = u256.toValue(lastAdmin) - startPos;
 	
 	var names = new Array();
@@ -283,18 +342,33 @@ generateUserTable = function(){
 	table+="</table>";
 	
 	document.getElementById('userTable').innerHTML = table;
-	
+	*/
 }
 
 resolveUserLink = function(userName)
 {
 	var tokens = userName.split(':');
 	document.getElementById('userAddressInputField').value = tokens[0];
-	var level = null;	
-	if(tokens[1] != "n"){
-		document.getElementById('userLevelInputField').value = tokens[1];	
+	var level = null;
+	document.getElementById('userLevelInputField').value = tokens[1];	
+	if(tokens[1] == "2"){
+		document.getElementById('adminRadio').checked = true;		
 	} else {
-		document.getElementById('userLevelInputField').value = "";
+		document.getElementById('userRadio').checked = true;	
 	}
-	document.getElementById('adminRadio').checked = true;
+}
+
+registerNickname = function(){
+	var nameString = document.getElementById("userNicknameInputField").value;
+	if(nameString == null || nameString == ""){
+		window.alert("There is no name in the nickname field.");
+		return;	
+	}
+	var nameBytes = u256.bytesOf(u256.value(parseInt(nameString, 16)));
+	var command = bytes.fromString("reg",32);
+
+	var payload = bytes.concat(command,nameBytes);
+
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), nickADDR, payload, u256.value(100000), eth.gasPrice());
+
 }

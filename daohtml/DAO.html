@@ -4,7 +4,7 @@
 <title>Denny's DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-21T16:19:27+0200" >
+<meta name="date" content="2014-04-22T00:35:22+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -69,7 +69,6 @@
 					<li><a href="javascript:void(0)" title="Clear"  onclick="clearDocument()">Clear</a></li>
 				</ul>
 			</div>
-			
 		</div>
 		<div id="tablesection">
 			<div id="tableMenu">
@@ -113,16 +112,18 @@
 	<div id="containerAdmin">
 		<div id="adminEditSection">
 			<h2 class="centerText">Admin tools</h2>
+			Nickname: <input type="text" name="userNickname" id="userNicknameInputField" maxlength="20"><br>
 			Address: <input type="text" name="userAddress" id="userAddressInputField" ><br>
 			User: <input type="radio" name="userRadio" id="userRadio" checked>
 			Admin: <input type="radio" name="userRadio" id="adminRadio">
-			<div id="userLevelDiv">Super Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
+			<div id="userLevelDiv">Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
 			<hr>
 			<div id="adminMenu">
 				<ul>
 					<li><a href="javascript:void(0)" title="AddUser" class="active" onclick="addUser()">Add User</a></li>
 					<li><a href="javascript:void(0)" title="RemoveUser" class="active" onclick="removeUser()">Remove User</a></li>
 					<li><a href="javascript:void(0)" title="UpdateUser" class="active" onclick="updateUser()">Update User</a></li>
+					<li><a href="javascript:void(0)" title="RegisterNick" class="active" onclick="registerNickname()">Register Nickname</a></li>
 				</ul>
 			</div>
 		</div>
