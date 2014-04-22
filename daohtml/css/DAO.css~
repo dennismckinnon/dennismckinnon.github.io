@@ -81,7 +81,6 @@ hr {
 	background: rgba(220,220,255); 
 	text-decoration: none; 
 	color: #402e16;
-	text-shadow: #eee 0px 0px 2px; 
 }
 
 #menu ul li a:hover {

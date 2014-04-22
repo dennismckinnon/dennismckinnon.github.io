@@ -3,6 +3,53 @@
    width: 600px;
 }
 
+#registerSection {
+	width: 470px;
+	height: 170px;
+	padding:5px 10px;
+	line-height: 150%;
+   border:2px solid;
+	border-radius:5px;
+	border-color: #402e16;
+}
+
+#registerNicknameInputField {
+	position: absolute;
+	left: 100px;
+	top: 258px;
+	width: 250px;
+}
+
+/* Admin buttons */
+#registerMenu {
+}
+
+#registerMenu ul { 
+    list-style:none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+#registerMenu ul li { 
+    display:inline;
+    float:left;
+}
+
+#registerMenu ul li a { 
+padding:5px; 
+text-decoration: none; color: #402e16;
+}
+	
+#registerMenu ul li a:hover 
+{
+	background-color:rgb(150,150,225,0.7) !important;
+	opacity: 0.7;
+}
+
+#registerMenu ul li a.active { 
+background: rgb(180,180,225,1.0) !important; 
+}
+
 #adminEditSection {
 	width: 470px;
 	height: 193px;
@@ -17,7 +64,7 @@
 	position: absolute;
 	left: 100px;
 	top: 227px;
-	width: 200px;
+	width: 250px;
 }
 
 #userAddressInputField {
@@ -53,8 +100,12 @@
 }
 
 #adminMenu ul li a { 
-padding:5px; 
-text-decoration: none; color: #402e16;
+	padding:5px; 
+	text-decoration: none; color: #402e16;
+}
+
+#adminMenu ul li a.deleteMeLink { 
+	color: #aa2222;
 }
 	
 #adminMenu ul li a:hover 

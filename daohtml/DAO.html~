@@ -4,7 +4,7 @@
 <title>Denny's DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-22T00:24:49+0200" >
+<meta name="date" content="2014-04-23T00:18:40+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -42,7 +42,7 @@
 			<li><a href="javascript:void(0)" title="About" onclick="switchPage(2)">About</a></li>
 		</ul>
 		<ul id="adminLinks">
-			<li><a class="adminLink" href="javascript:void(0)" title="Admin" onclick="switchPage(3)">Admin</a></li>
+			<li><a id="adminLinkL" class="adminLink" href="javascript:void(0)" title="Admin" onclick="switchPage(3)">Control Panel</a></li>
 		</ul>
 		
 		<ul>
@@ -112,20 +112,32 @@
 	<div id="containerAdmin">
 		<div id="adminEditSection">
 			<h2 class="centerText">Admin tools</h2>
-			Nickname: <input type="text" name="userNickname" id="userNicknameInputField" maxlength="20"><br>
+			Nickname: <input type="text" name="userNickname" id="userNicknameInputField" maxlength="20" disabled><br>
 			Address: <input type="text" name="userAddress" id="userAddressInputField" ><br>
 			User: <input type="radio" name="userRadio" id="userRadio" checked>
 			Admin: <input type="radio" name="userRadio" id="adminRadio">
-			<div id="userLevelDiv">Level: <input type="text" name="userLevel" id="userLevelInputField" ></div>	
 			<hr>
 			<div id="adminMenu">
-				<ul>
-					<li><a href="javascript:void(0)" title="AddUser" class="active" onclick="addUser()">Add User</a></li>
+				<ul id="adminButtons">
 					<li><a href="javascript:void(0)" title="RemoveUser" class="active" onclick="removeUser()">Remove User</a></li>
-					<li><a href="javascript:void(0)" title="UpdateUser" class="active" onclick="updateUser()">Update User</a></li>
-					<li><a href="javascript:void(0)" title="UpdateUser" class="active" onclick="registerNickname()">Register Nickname</a></li>
+					<li><a href="javascript:void(0)" title="PromoteUser" class="active" onclick="promoteUser()">Promote User</a></li>
+				</ul>
+				<ul id="deleteMeButton">
+					<li><a href="javascript:void(0)" title="DeleteMe" class="deleteMeLink" onclick="deleteMe()">Delete Me</a></li>
+					
 				</ul>
 			</div>
+		</div>
+		<div id="registerSection">
+		<p>You are currently not registered with this DAO. If you want to register, choose a nickname below (max 20 characters).</p>
+		<hr>
+		Nickname: <input type="text" name="registerNickname" id="registerNicknameInputField" maxlength="20"><br>
+		<hr>
+		<div id="registerMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="RegisterNick" class="active" onclick="registerNickname()">Register</a></li>
+				</ul>
+		</div>
 		</div>
 		<div id="userTableSection">
 			<div id="adminMenu">
