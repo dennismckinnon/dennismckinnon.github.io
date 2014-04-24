@@ -50,6 +50,7 @@
 	float: left;
 	display: block;
 	left: 380px;
+	width: 250px;
 	padding:5px 10px;
 	margin-top: 10px;
 	border:2px solid;
@@ -59,6 +60,7 @@
 
 /* Table buttons */
 #pollTableMenu {
+	
 }
 
 

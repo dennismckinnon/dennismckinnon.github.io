@@ -2,7 +2,7 @@
  *          Initialization          *
  ************************************/
 
-var dougADDR = key.addressOf("6207fbebac090bab3c91d4de0f4264b3338982b9");
+var dougADDR = key.addressOf("b74b44d220054b8362928fa5f3d1539cc6fa0bea");
 
 var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
 
@@ -19,8 +19,9 @@ while (dtt != dat){
 
 var dbADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
 var adminADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
-//var nickADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("nick",32))));
-var nickADDR = key.addressOf("7ea61db64cdf9ed027cb8405d499700ffd046ad3");
+var nickADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("nick",32))));
+var pollADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("pollcode",32))));
+
  
 var infohashes = new Array();
 
@@ -286,10 +287,16 @@ clearDocument = function()
  *         Consensus stuff          *
  ************************************/
 
-readContractMeta = function()
-{
 
-	var ADDR = key.addressOf(document.getElementById('address').value);
+var currentPollAddress = null;
+
+readContractMeta = function(contractData)
+{
+	/*
+	var tokens = contractData.split(":");
+
+	var ADDR = key.addressOf(tokens[0]);
+	currentPollAddress = u256.fromAddress(tokens[1]);
 
 	var metaident = u256.toValue(eth.storageAt(ADDR, u256.value(0)));
 
@@ -300,17 +307,17 @@ readContractMeta = function()
 
 		var da = u256.toValue(eth.storageAt(ADDR, u256.value(3)));
 		var d1 = da%65536;
-		var d2 = (Math.floor(da/65536))%256
-		var d3 = (Math.floor(da/16777216))%256
-		var date = d3.toString(16)+"/"+d2.toString(16)+"/"+d1.toString(16)
+		var d2 = (Math.floor(da/65536))%256;
+		var d3 = (Math.floor(da/16777216))%256;
+		var date = d3.toString(16)+"/"+d2.toString(16)+"/"+d1.toString(16);
 
 		var ve = u256.toValue(eth.storageAt(ADDR, u256.value(4)));
 		var v1 = ve%65536;
-		var v2 = (Math.floor(ve/65536))%256
-		var v3 = (Math.floor(ve/16777216))%256
-		var vers = v3.toString(16)+"."+v2.toString(16)+"."+v1.toString(16)
+		var v2 = (Math.floor(ve/65536))%256;
+		var v3 = (Math.floor(ve/16777216))%256;
+		var vers = v3.toString(16)+"."+v2.toString(16)+"."+v1.toString(16);
 
-		var name = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(5))));
+		var name = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(5))));;
 
 		var desc = "";
 		for (var i = 6; i <= 15; i++) {
@@ -318,16 +325,57 @@ readContractMeta = function()
 			desc = desc + temp;
 		}
 
-		document.getElementById('creator').value = creat;
-		document.getElementById('author').value = auth;
-		document.getElementById('date').value = date;
-		document.getElementById('version').value = vers;
-		document.getElementById('name').value = name;
-		document.getElementById('descriptionTextArea').value = desc;
+		document.getElementById('contractCreator').value = creat;
+		document.getElementById('contractAuthor').value = auth;
+		document.getElementById('contractDate').value = date;
+		document.getElementById('contractVersion').value = vers;
+		document.getElementById('contractName').value = name;
+		document.getElementById('contractDescriptionTextArea').value = desc;
 	};
-
+	*/
 }
 
+generatePollTable = function(){
+
+	/*
+
+	// Get tail at 0x18
+	var pointer = eth.storageAt(pollADDR,u256.value(24));
+	
+	var pollAddrs = new Array();
+	var contractAddrs = new Array();
+	var contractNames = new Array();
+	
+	var table= "<table><tr><td>Poll</td></tr>";
+	var counter = 0;
+	while(!u256.isNull(pointer)){
+		var next = u256.add(pointer,u256.value(1));
+		pollAddrs[counter] = bytes.toString(u256.bytesOf(pointer));
+		pointer = eth.storageAt(pollADDR,pointer);
+		contractAddrs[counter] = bytes.toString(u256.bytesOf(pointer));
+		pointer = eth.storageAt(pollADDR,pointer);
+		contractNames[counter] = bytes.toString(u256.bytesOf(pointer));
+		
+		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
+		contractAddrs[counter] + ':' + pollAddr[counter] + '&quot;' + ');">' + nicks[j] + 
+		'</a></td></tr>';
+		
+		pointer = next;
+		counter++;
+	}
+	
+	table+="</table>";
+	document.getElementById('pollTable').innerHTML = table;
+*/
+}
+
+
+/*
+vote = function(yesno){
+	var ADDR = key.addressOf(currentPollAddress);
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), ADDR, payload, u256.value(100000), eth.gasPrice());	
+}
+*/
 
 /************************************
  *       User related stuff         *
@@ -378,13 +426,14 @@ promoteUser = function(){
 		return;	
 	}
 	
-	var command = bytes.fromString("promote",32);
+	var command = bytes.fromString("regadm",32);
 	
-	var nameBytes = bytes.fromString(userName,32);	
+	var address256 = u256.fromAddress(key.addressOf(nickName));
+	var addrBytes = u256.bytesOf(getAddress256FromNick(userName));
+	
+	var payload = bytes.concat(command,addrBytes);
 
-	var payload = bytes.concat(command,nameBytes);
-
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), nickADDR, payload, u256.value(100000), eth.gasPrice());
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());
 	
 }
 
@@ -421,16 +470,15 @@ generateUserTable = function(){
 	// pointer = eth.storageAt(nickADDR, pointer);
 	// pointer = u256.add(pointer, u256.value(2));
 	
-	// We're essentially reading the list from element 1 and onwards (not from element 0).
 	for (var i = 0; i < size; i++) {
 		pointer = eth.storageAt(nickADDR, pointer);
 		var nick = bytes.toString(u256.bytesOf(pointer));
 		nicks[i] = nick;
 		addrii[i] = eth.storageAt(nickADDR,pointer);
 		// Get the address of the user.
-		var priv = u256.sub(pointer,u256.value(1));
+		var priv = eth.storageAt(adminADDR, addrii[i]);
 		
-		userPrivs[i] = u256.toValue(eth.storageAt(nickADDR,priv));
+		userPrivs[i] = u256.toValue(priv);
 		pointer = u256.add(pointer, u256.value(2));
 	};
 	
@@ -500,7 +548,7 @@ getMyNick256 = function(){
 	if(u256.isNull(myNick256)) {
 		return u256.value(0);
 	}
-	return myNick256; 
+	return myNick256;
 }
 
 // Returns nickname as a string.
@@ -509,33 +557,17 @@ getMyNick = function(){
 	return bytes.toString(u256.bytesOf(myNick256));
 }
 
-getAddress256FromNick(userNick){
-	var nick256 = bytes.u256of(bytes.fromString(userNick));
-	var address256 = eth.storageAt(nickADDR,nick256);
-	return address256;
-}
-
-/*
-
-getAddressStrFromNick(userNick){
-	return bytes.toString(u256.bytesOf(getAddress256FromNick());
-}
-
-getUserPrivFromNick(){
-	var nick256 = bytes.u256of(bytes.fromString(userNick));
-	var privAddr256 = sub(nick256,u256.value(1));
-	var priv256 = eth.storageAt(nickADDR,privAddr256);
-	return u256.toValue(priv256);
-}
-
 // Returns user level as a number.
 getMyUserLevel = function(){
-	var myAddr256 = u256.fromAddress(key.address(eth.key()));
+	var myAddr256 = u256.fromAddress(key.address(eth.key()[]));
 	if(u256.isNull(myAddr256)){
 		return 0;
 	}
 	return u256.toValue(eth.storageAt(adminADDR, myAddr256));
-}*/
+}
 
-
+getAddress256FromNick = function(nickName){
+	var nick256 = bytes.u256of(bytes.fromString(nickName,32));
+	return eth.storageAt(nickADDR,nick256);
+}
 

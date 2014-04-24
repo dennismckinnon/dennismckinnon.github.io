@@ -1,5 +1,5 @@
 #containerConsensus{
-	display: block;
+	display: none;
 	width: 600px;
 }
 
