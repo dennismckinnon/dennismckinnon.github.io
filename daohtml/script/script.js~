@@ -20,7 +20,7 @@ while (dtt != dat){
 var dbADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
 var adminADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
 //var nickADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("nick",32))));
-var nickADDR = key.addressOf("37e6ddf2cb21f8226b58d0a7939fd7259ad6f346");
+var nickADDR = key.addressOf("7ea61db64cdf9ed027cb8405d499700ffd046ad3");
  
 var infohashes = new Array();
 
@@ -333,43 +333,6 @@ readContractMeta = function()
  *       User related stuff         *
  ************************************/
 
-addUser = function(){
-	
-	var userString = document.getElementById("userAddressInputField").value;
-
-	if(userString == null || userString == ""){
-		window.alert("No user name has been specified.");
-		return;	
-	}
-	
-	var userBytes = u256.bytesOf(u256.fromAddress(key.addressOf(userString)));
-
-	var command = null;
-	var payload = null;
-
-	if(document.getElementById('userRadio').checked) {
-		
-		command = bytes.fromString("regmem",32);
-		payload = bytes.concat(command,userBytes);
-		
-	} else {
-		command = bytes.fromString("regadm",32);
-		payload = bytes.concat(command,userBytes);
-		
-		var levelBytes = null;
-		var userLevelString =  document.getElementById("userLevelInputField").value;
-		
-		if(userLevelString != null && userLevelString != ""){
-			levelBytes = u256.bytesOf(u256.value(parseInt(userLevelString, 10)));
-			payload = bytes.concat(payload,levelBytes);
-		}
-		
-	}
-
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());	
-	
-}
-
 removeUser = function(){
 	var userName = document.getElementById("userNicknameInputField").value;
 
@@ -415,20 +378,13 @@ promoteUser = function(){
 		return;	
 	}
 	
-	var userName256 = bytes.u256of(bytes.fromString(userName));
+	var command = bytes.fromString("promote",32);
 	
-	var userAddress256 = eth.storageAt(nickADDR,userName256);
-	
-	
-	//var userAddressStr = u256.isNull(userAddress256) ? "" : key.stringOf(u256.toAddress(userAddress256));
-		
-	var command = bytes.fromString("regadm",32);
-	// byte version of name.
-	var nameBytes = u256.bytesOf(userAddress256);
+	var nameBytes = bytes.fromString(userName,32);	
 
 	var payload = bytes.concat(command,nameBytes);
 
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());
+	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), nickADDR, payload, u256.value(100000), eth.gasPrice());
 	
 }
 
@@ -458,7 +414,8 @@ generateUserTable = function(){
 	var size = u256.toValue(eth.storageAt(nickADDR, u256.value(17)));
 	var nicks = new Array();
 	var addrii = new Array(); // Deal with it
-	var userTypes = new Array();
+	var userPrivs = new Array();
+	
 	
 	// We need to jump past the tail, as it is only the contract nick.	
 	// pointer = eth.storageAt(nickADDR, pointer);
@@ -469,25 +426,19 @@ generateUserTable = function(){
 		pointer = eth.storageAt(nickADDR, pointer);
 		var nick = bytes.toString(u256.bytesOf(pointer));
 		nicks[i] = nick;
-		// Get the address of the user.
 		addrii[i] = eth.storageAt(nickADDR,pointer);
+		// Get the address of the user.
+		var priv = u256.sub(pointer,u256.value(1));
+		
+		userPrivs[i] = u256.toValue(eth.storageAt(nickADDR,priv));
 		pointer = u256.add(pointer, u256.value(2));
-	};
-	
-	for (var i = 0; i < nicks.length; i++) {
-		var userLevel256 = eth.storageAt(adminADDR, addrii[i])
-		if(!u256.isNull(userLevel256)){
-			userTypes[i] = u256.toValue(userLevel256);		
-		} else {
-			userTypes[i] = 0;
-		}
 	};
 	
 	var table= "<table><tr><td>Nickname</td><td>Type</td></tr>";
 	
 	for (var j = 0; j < nicks.length; j++) {
 		var userTypeStr = null;
-		switch(userTypes[j])
+		switch(userPrivs[j])
 		{
 			case 0:
 		  		userTypeStr = "Squatter";
@@ -495,15 +446,12 @@ generateUserTable = function(){
 			case 1:
 		  		userTypeStr = "Member";
 				break;
-			case 3:
-		  		userTypeStr = "Admin";
-		  		break;
 			default:
-			  userTypeStr = "Um...";
+			  userTypeStr = "Admin";
 		}
 		var addressString = (u256.toValue(addrii[j])).toString(16);
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
-		addressString + ':' + userTypes[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
+		addressString + ':' + userPrivs[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
 		'</a></td><td>' + userTypeStr + '</td></tr>';
 	}
 	
@@ -541,12 +489,16 @@ registerNickname = function(){
 	
 }
 
+/************************************
+ *     DOUG utility functions       *
+ ************************************/
+
 // Returns nickname as a u256 object.
 getMyNick256 = function(){
 	var myAddr256 = u256.fromAddress(key.address(eth.key()));
 	var myNick256 = eth.storageAt(nickADDR, myAddr256);
 	if(u256.isNull(myNick256)) {
-		return u256.value(0);	
+		return u256.value(0);
 	}
 	return myNick256; 
 }
@@ -557,6 +509,25 @@ getMyNick = function(){
 	return bytes.toString(u256.bytesOf(myNick256));
 }
 
+getAddress256FromNick(userNick){
+	var nick256 = bytes.u256of(bytes.fromString(userNick));
+	var address256 = eth.storageAt(nickADDR,nick256);
+	return address256;
+}
+
+/*
+
+getAddressStrFromNick(userNick){
+	return bytes.toString(u256.bytesOf(getAddress256FromNick());
+}
+
+getUserPrivFromNick(){
+	var nick256 = bytes.u256of(bytes.fromString(userNick));
+	var privAddr256 = sub(nick256,u256.value(1));
+	var priv256 = eth.storageAt(nickADDR,privAddr256);
+	return u256.toValue(priv256);
+}
+
 // Returns user level as a number.
 getMyUserLevel = function(){
 	var myAddr256 = u256.fromAddress(key.address(eth.key()));
@@ -564,5 +535,7 @@ getMyUserLevel = function(){
 		return 0;
 	}
 	return u256.toValue(eth.storageAt(adminADDR, myAddr256));
-}
+}*/
+
+
 
