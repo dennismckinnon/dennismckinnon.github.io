@@ -1,3 +1,7 @@
+/************************************
+ *          Initialization          *
+ ************************************/
+
 var dougADDR = key.addressOf("6207fbebac090bab3c91d4de0f4264b3338982b9");
 
 var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
@@ -16,7 +20,7 @@ while (dtt != dat){
 var dbADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
 var adminADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
 //var nickADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("nick",32))));
-var nickADDR = key.addressOf("d9bc42e27bf6559d5379e7d1ffcd22499a803f0c");
+var nickADDR = key.addressOf("37e6ddf2cb21f8226b58d0a7939fd7259ad6f346");
  
 var infohashes = new Array();
 
@@ -27,8 +31,12 @@ window.onload = function(){
 	if(myNick == null || myNick == ""){
 			document.getElementById("adminLinkL").innerHTML = "Register";
 	}
-	
+	prepareDatabasePage();
 }
+
+/************************************
+ *              Menu                *
+ ************************************/
 
 switchPage = function(callerID){
 
@@ -37,11 +45,17 @@ switchPage = function(callerID){
 		document.getElementById("containerConsensus").style.display = "none";
 		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "none";
+		prepareDatabasePage();
 	} else if(callerID == "1"){	
 		document.getElementById("containerDatabase").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "block";
 		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "none";
+		if(getMyAdminLevel() > 1){
+			document.getElementById("pollViewMenu").style.display = "block";
+		} else {
+			document.getElementById("pollViewMenu").style.display = "none";
+		}
 	} else if(callerID == "2"){
 		document.getElementById("containerDatabase").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "none";
@@ -71,6 +85,44 @@ switchPage = function(callerID){
 		
 	}
 
+}
+
+/************************************
+ *         Database stuff           *
+ ************************************/
+
+prepareDatabasePage = function(){
+	var myNick = getMyNick();
+	if(myNick == ""){
+		// Fix the input fields.
+		document.getElementById('infohashInputField').disabled = true;
+		document.getElementById('uploaderInputField').disabled = true;
+		document.getElementById('filetypeInputField').disabled = true;
+		document.getElementById('filequalityInputField').disabled = true;
+		document.getElementById('titleInputField').disabled = true;
+		document.getElementById('descriptionTextArea').disabled = true;
+		document.getElementById('createDocumentButton').style.display = "none";
+		document.getElementById('updateDocumentButton').style.display = "none";
+		
+	} else {
+		document.getElementById('infohashInputField').disabled = false;
+		document.getElementById('uploaderInputField').disabled = false;
+		document.getElementById('filetypeInputField').disabled = false;
+		document.getElementById('filequalityInputField').disabled = false;
+		document.getElementById('titleInputField').disabled = false;
+		document.getElementById('descriptionTextArea').disabled = false;
+		document.getElementById('createDocumentButton').style.display = "block";
+		document.getElementById('updateDocumentButton').style.display = "none";
+	}
+	document.getElementById('deleteDocumentButton').style.display = "none";
+	
+	document.getElementById('infohashInputField').value = "";
+	document.getElementById('uploaderInputField').value = myNick;
+	document.getElementById('filetypeInputField').value = "";
+	document.getElementById('filequalityInputField').value = "";
+	document.getElementById('titleInputField').value = "";
+	document.getElementById('descriptionTextArea').value = "";
+	
 }
 
 generateTable = function(){
@@ -146,13 +198,54 @@ resolveMagnetLink = function(hashIndex)
 	document.getElementById('titleInputField').value = title;
 	document.getElementById('descriptionTextArea').value = desc;
 	
+	var myNick = getMyNick();
+	if(myNick != ""){
+		if(myNick == uploader){
+			// Fix the input fields.
+			document.getElementById('infohashInputField').disabled = true;
+			document.getElementById('uploaderInputField').disabled = true;
+			document.getElementById('filetypeInputField').disabled = false;
+			document.getElementById('filequalityInputField').disabled = false;
+			document.getElementById('titleInputField').disabled = false;
+			document.getElementById('descriptionTextArea').disabled = false;
+			// Fix the buttons.		
+			document.getElementById('updateDocumentButton').style.display = "block";
+			document.getElementById('deleteDocumentButton').style.display = "block";
+		} else {
+			// Fix the input fields.
+			document.getElementById('infohashInputField').disabled = true;
+			document.getElementById('uploaderInputField').disabled = true;
+			document.getElementById('filetypeInputField').disabled = true;
+			document.getElementById('filequalityInputField').disabled = true;
+			document.getElementById('titleInputField').disabled = true;
+			document.getElementById('descriptionTextArea').disabled = true;
+			
+			document.getElementById('updateDocumentButton').style.display = "none";
+			var myLevel = getMyUserLevel();
+			if(myLevel > 1){				
+				document.getElementById('deleteDocumentButton').style.display = "block";			
+			} else {
+				document.getElementById('deleteDocumentButton').style.display = "block";			
+			}
+		}
+		document.getElementById('createDocumentButton').style.display = "none";
+		
+	}
+	
 }
 
 updateDocument = function()
 {
+	var ulString = document.getElementById("uploaderInputField").value;
+	var myNick = getMyNick();
+	if(ulString != myNick){
+		window.alert("The uploader name must match your nickname (" + myNick + ").");
+		return;
+	}
+	
 	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
 	var title = bytes.fromString(document.getElementById("titleInputField").value, 64);
-	var uploader = bytes.fromString(document.getElementById("uploaderInputField").value, 32);
+	var uploader = bytes.fromString(ulString, 32);
 	var filetype = bytes.fromString(document.getElementById("filetypeInputField").value, 32);
 	var filequality = bytes.fromString(document.getElementById("filequalityInputField").value, 32);
 	var descript = bytes.fromString(document.getElementById("descriptionTextArea").value, 800);
@@ -186,13 +279,54 @@ deleteDocument = function()
 
 clearDocument = function()
 {
-	document.getElementById('infohashInputField').value = "";
-	document.getElementById('uploaderInputField').value = "";
-	document.getElementById('filetypeInputField').value = "";
-	document.getElementById('filequalityInputField').value = "";
-	document.getElementById('titleInputField').value = "";
-	document.getElementById('descriptionTextArea').value = "";
+	prepareDatabasePage();
 };
+
+/************************************
+ *         Consensus stuff          *
+ ************************************/
+
+readContractMeta = function()
+{
+
+	var ADDR = key.addressOf(document.getElementById('address').value);
+
+	var metaident = u256.toValue(eth.storageAt(ADDR, u256.value(0)));
+
+	if (metaident == 585546221227) {
+		var creat = u256.toValue(eth.storageAt(ADDR, u256.value(1)));
+
+		var auth = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(2))));
+
+		var da = u256.toValue(eth.storageAt(ADDR, u256.value(3)));
+		var d1 = da%65536;
+		var d2 = (Math.floor(da/65536))%256
+		var d3 = (Math.floor(da/16777216))%256
+		var date = d3.toString(16)+"/"+d2.toString(16)+"/"+d1.toString(16)
+
+		var ve = u256.toValue(eth.storageAt(ADDR, u256.value(4)));
+		var v1 = ve%65536;
+		var v2 = (Math.floor(ve/65536))%256
+		var v3 = (Math.floor(ve/16777216))%256
+		var vers = v3.toString(16)+"."+v2.toString(16)+"."+v1.toString(16)
+
+		var name = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(5))));
+
+		var desc = "";
+		for (var i = 6; i <= 15; i++) {
+			var temp = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(i))));
+			desc = desc + temp;
+		}
+
+		document.getElementById('creator').value = creat;
+		document.getElementById('author').value = auth;
+		document.getElementById('date').value = date;
+		document.getElementById('version').value = vers;
+		document.getElementById('name').value = name;
+		document.getElementById('descriptionTextArea').value = desc;
+	};
+
+}
 
 
 /************************************
@@ -274,15 +408,23 @@ promoteUser = function(){
 		return;
 	}
 	
-	var sure = confirm("Are you sure you want to promote member: " + userName + "?\n\nHe will be given administrator privileges.");
+	var sure = confirm("Are you sure you want to promote user: " + userName + "?\n\nThey will be given administrator privileges.");
 	
 	if(!sure){
 		window.alert("User was not promoted.");
 		return;	
 	}
 	
-	var command = bytes.fromString("regadm",32);	
-	var nameBytes = bytes.fromString(userName,32);
+	var userName256 = bytes.u256of(bytes.fromString(userName));
+	
+	var userAddress256 = eth.storageAt(nickADDR,userName256);
+	
+	
+	//var userAddressStr = u256.isNull(userAddress256) ? "" : key.stringOf(u256.toAddress(userAddress256));
+		
+	var command = bytes.fromString("regadm",32);
+	// byte version of name.
+	var nameBytes = u256.bytesOf(userAddress256);
 
 	var payload = bytes.concat(command,nameBytes);
 
@@ -300,7 +442,7 @@ deleteMe = function(){
 		var superSure = confirm("Are you sure? You will loose your admin privileges.");	
 		if(!superSure){
 			window.alert("Account not deleted.");
-			return;	
+			return;
 		}
 	}
 	

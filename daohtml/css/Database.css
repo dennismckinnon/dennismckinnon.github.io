@@ -54,7 +54,6 @@
 	float: left;
 	display: block;
 	left: 380px;
-	width:120px; 
 	padding:5px 10px;
 	margin-top: 10px;
 	border:2px solid;
@@ -110,6 +109,10 @@ background: rgb(180,180,225,1.0) !important;
 	height:100%;
 	margin:0px;
 	padding:0px;
+}
+
+#datatable table td {
+	width: 200px;	
 }
 
 #datatable a {

@@ -4,7 +4,7 @@
 <title>Denny's DAO</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Androlo" >
-<meta name="date" content="2014-04-23T00:18:40+0200" >
+<meta name="date" content="2014-04-24T14:12:17+0200" >
 <meta name="copyright" content="">
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -63,9 +63,16 @@
 			<textarea name="description" id="descriptionTextArea" rows="10" cols="40"></textarea>
 			<hr>
 			<div id="editMenu">
-				<ul>
-					<li><a href="javascript:void(0)" title="Update" onclick="updateDocument()">Update/Create</a></li>
+				<ul id="createDocumentButton">
+					<li><a href="javascript:void(0)" title="Create" onclick="updateDocument()">Create</a></li>
+				</ul>
+				<ul id="updateDocumentButton">
+					<li><a href="javascript:void(0)" title="Update" onclick="updateDocument()">Update</a></li>
+				</ul>
+				<ul id="deleteDocumentButton">
 					<li><a href="javascript:void(0)" title="Delete" onclick="deleteDocument()">Delete</a></li>
+				</ul>
+				<ul id="clearDocumentFieldsButton">
 					<li><a href="javascript:void(0)" title="Clear"  onclick="clearDocument()">Clear</a></li>
 				</ul>
 			</div>
@@ -84,7 +91,34 @@
 	</div>
 	
 	<div id="containerConsensus">
-		TODO
+		<div id="contractViewSection">
+			<h2 class="centerText">Poll data</h2>
+			Address: <input type="text" class="textInput" name="address" id="contractAddress" onKeyUp="readContractMeta()"><br>
+			Creator: <input type="text" class="textInput" name="creator" id="contractCreator" disabled><br>
+			Author: <input type="text" class="textInput" name="author" id="contractAuthor" disabled><br>
+			Date: <input type="text" class="textInput" name="date" id="contractDate" disabled><br>
+			Version: <input type="text" class="textInput" name="version" id="contractVersion" disabled><br>
+			Name: <input type="text" class="textInput" name="name" id="contractName" disabled><br>
+			Description:<br>
+			<textarea name="description" id="contractDescriptionTextArea" rows="10" cols="40" disabled></textarea>
+			<hr>
+			<div id="pollViewMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="Update" class="active" onclick="updateDocument()">Pass Vote</a></li>
+				</ul>
+			</div>
+			
+		</div>
+		<div id="pollTableSection">
+			<div id="pollTableMenu">
+				<ul>
+					<li><a href="javascript:void(0)" title="Generate" class="active" onclick="generateTable()">List Active Polls</a></li>
+				</ul>
+			</div>
+			<br>
+			<hr>
+			<div id="pollTable" ></div>
+		</div>
 	</div>
 	
 	<div id="containerAbout">
@@ -112,7 +146,7 @@
 	<div id="containerAdmin">
 		<div id="adminEditSection">
 			<h2 class="centerText">Admin tools</h2>
-			Nickname: <input type="text" name="userNickname" id="userNicknameInputField" maxlength="20" disabled><br>
+			Nickname: <input type="text" name="userNickname" id="userNicknameInputField" maxlength="20" disabled='disabled'><br>
 			Address: <input type="text" name="userAddress" id="userAddressInputField" ><br>
 			User: <input type="radio" name="userRadio" id="userRadio" checked>
 			Admin: <input type="radio" name="userRadio" id="adminRadio">
@@ -124,7 +158,6 @@
 				</ul>
 				<ul id="deleteMeButton">
 					<li><a href="javascript:void(0)" title="DeleteMe" class="deleteMeLink" onclick="deleteMe()">Delete Me</a></li>
-					
 				</ul>
 			</div>
 		</div>

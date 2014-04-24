@@ -35,10 +35,8 @@ hr {
 	width: 245px;
 }
 
-.textInputLevel {
-    position: absolute;
-    left: 110px;
-    width: 40px;
+input:disabled {
+	color: black;
 }
 
 /* Header stuff */

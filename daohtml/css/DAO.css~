@@ -35,12 +35,6 @@ hr {
 	width: 245px;
 }
 
-.textInputLevel {
-    position: absolute;
-    left: 110px;
-    width: 40px;
-}
-
 /* Header stuff */
 
 #header {
