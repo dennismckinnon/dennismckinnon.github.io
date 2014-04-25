@@ -2,7 +2,7 @@
  *          Initialization          *
  ************************************/
 
-var dougADDR = key.addressOf("b74b44d220054b8362928fa5f3d1539cc6fa0bea");
+var dougADDR = key.addressOf("fc87f9b92b37b9b6133a22ff3352f72996de77eb");
 
 var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
 
@@ -496,8 +496,7 @@ generateUserTable = function(){
 			default:
 			  userTypeStr = "Admin";
 		}
-		var addressString = bytes.toString(u256.bytesOf(addrii[j]));
-		document.getElementById('userAddressInputField').value = addressString;
+		var addressString = key.stringOf(u256.toAddress(addrii[j]));
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
 		addressString + ':' + userPrivs[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
 		'</a></td><td>' + userTypeStr + '</td></tr>';
