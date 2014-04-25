@@ -333,28 +333,42 @@ readContractMeta = function(contractData)
 	};
 }
 
+var pollAddrs = new Array();
+var contractAddrs = new Array();
+	
 generatePollTable = function(){
 
 	// Get tail at 0x18
 	var pointer = eth.storageAt(dougADDR,u256.value(24));
+
 	
-	var pollAddrs = new Array();
-	var contractAddrs = new Array();
+	if(u256.isNull(pointer)){
+		document.getElementById('contractCreator').value = "null";		
+	}
+
+	pollAddrs = new Array();
+	contractAddrs = new Array();
+
 	var contractNames = new Array();
 	
 	var table= "<table><tr><td>Poll</td></tr>";
+	
 	var counter = 0;
+	
 	while(!u256.isNull(pointer)){
 		var next = u256.add(pointer,u256.value(1));
-		pollAddrs[counter] = bytes.toString(u256.bytesOf(pointer));
+		
+		
+		pollAddrs[counter] = pointer;
 		pointer = eth.storageAt(dougADDR,pointer);
-		contractAddrs[counter] = bytes.toString(u256.bytesOf(pointer));
+		
+		contractAddrs[counter] = pointer;
 		pointer = eth.storageAt(dougADDR,pointer);
 		contractNames[counter] = bytes.toString(u256.bytesOf(pointer));
 		
+		
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
-		contractAddrs[counter] + ':' + pollAddr[counter] + '&quot;' + ');">' + contractNames[counter] + 
-		'</a></td></tr>';
+		counter + '&quot;' + ');">' + contractNames[counter] + '</a></td></tr>';		
 		
 		pointer = eth.storageAt(dougADDR,next);
 		counter++;
@@ -362,6 +376,7 @@ generatePollTable = function(){
 	
 	table+="</table>";
 	document.getElementById('pollTable').innerHTML = table;
+	
 }
 
 
