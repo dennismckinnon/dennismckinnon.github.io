@@ -292,7 +292,6 @@ var currentPollAddress = null;
 
 readContractMeta = function(contractData)
 {
-	/*
 	var tokens = contractData.split(":");
 
 	var ADDR = key.addressOf(tokens[0]);
@@ -332,12 +331,9 @@ readContractMeta = function(contractData)
 		document.getElementById('contractName').value = name;
 		document.getElementById('contractDescriptionTextArea').value = desc;
 	};
-	*/
 }
 
 generatePollTable = function(){
-
-	/*
 
 	// Get tail at 0x18
 	var pointer = eth.storageAt(pollADDR,u256.value(24));
@@ -366,7 +362,6 @@ generatePollTable = function(){
 	
 	table+="</table>";
 	document.getElementById('pollTable').innerHTML = table;
-*/
 }
 
 

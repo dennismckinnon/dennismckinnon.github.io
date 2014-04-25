@@ -2,7 +2,7 @@
  *          Initialization          *
  ************************************/
 
-var dougADDR = key.addressOf("b74b44d220054b8362928fa5f3d1539cc6fa0bea");
+var dougADDR = key.addressOf("fc87f9b92b37b9b6133a22ff3352f72996de77eb");
 
 var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
 
@@ -127,7 +127,7 @@ prepareDatabasePage = function(){
 }
 
 generateTable = function(){
-
+	//hi
 	var pointer1 = u256.value(32);
 	var pointer2 = u256.value(37);
 	var pointer3 = u256.value(38);
@@ -292,7 +292,6 @@ var currentPollAddress = null;
 
 readContractMeta = function(contractData)
 {
-	/*
 	var tokens = contractData.split(":");
 
 	var ADDR = key.addressOf(tokens[0]);
@@ -332,12 +331,9 @@ readContractMeta = function(contractData)
 		document.getElementById('contractName').value = name;
 		document.getElementById('contractDescriptionTextArea').value = desc;
 	};
-	*/
 }
 
 generatePollTable = function(){
-
-	/*
 
 	// Get tail at 0x18
 	var pointer = eth.storageAt(pollADDR,u256.value(24));
@@ -366,7 +362,6 @@ generatePollTable = function(){
 	
 	table+="</table>";
 	document.getElementById('pollTable').innerHTML = table;
-*/
 }
 
 
@@ -428,8 +423,7 @@ promoteUser = function(){
 	
 	var command = bytes.fromString("regadm",32);
 	
-	var userName256 = u256.fromAddress(key.addressOf(nickName));
-	var addrBytes = u256.bytesOf(userName256);
+	var addrBytes = u256.bytesOf(getAddress256FromNick(userName));
 	
 	var payload = bytes.concat(command,addrBytes);
 
@@ -497,8 +491,7 @@ generateUserTable = function(){
 			default:
 			  userTypeStr = "Admin";
 		}
-		var addressString = bytes.toString(u256.bytesOf(addrii[j]));
-		document.getElementById('userAddressInputField').value = addressString;
+		var addressString = key.stringOf(u256.toAddress(addrii[j]));
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
 		addressString + ':' + userPrivs[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
 		'</a></td><td>' + userTypeStr + '</td></tr>';
