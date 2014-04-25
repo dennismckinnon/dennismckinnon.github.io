@@ -127,7 +127,7 @@ prepareDatabasePage = function(){
 }
 
 generateTable = function(){
-
+	//hi
 	var pointer1 = u256.value(32);
 	var pointer2 = u256.value(37);
 	var pointer3 = u256.value(38);
