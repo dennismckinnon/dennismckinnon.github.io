@@ -295,13 +295,14 @@ readContractMeta = function(contractDataSlot)
 	var index = parseInt(contractDataSlot);
 	
 
-	var ADDR = key.addressOf(contractAddrs[index]);
+	var ADDR = u256.toAddress(contractAddrs[index]);
 	currentPollAddress = pollAddrs[index];
 
 	var metaident = u256.toValue(eth.storageAt(ADDR, u256.value(0)));
+	//document.getElementById('contractCreator').value = metaident.toString(16);
 
 	if (metaident == 585546221227) {
-		var creat = u256.toValue(eth.storageAt(ADDR, u256.value(1)));
+		var creat = key.stringOf(u256.toAddress(eth.storageAt(ADDR, u256.value(1))));
 
 		var auth = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(2))));
 
@@ -325,6 +326,7 @@ readContractMeta = function(contractDataSlot)
 			desc = desc + temp;
 		}
 
+		document.getElementById('contractAddress').value = key.stringOf(u256.toAddress(contractAddrs[index]));
 		document.getElementById('contractCreator').value = creat;
 		document.getElementById('contractAuthor').value = auth;
 		document.getElementById('contractDate').value = date;
@@ -332,6 +334,7 @@ readContractMeta = function(contractDataSlot)
 		document.getElementById('contractName').value = name;
 		document.getElementById('contractDescriptionTextArea').value = desc;
 	};
+	
 }
 	
 generatePollTable = function(){
