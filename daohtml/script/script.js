@@ -381,12 +381,20 @@ generatePollTable = function(){
 }
 
 
-/*
+
 vote = function(yesno){
-	var ADDR = key.addressOf(currentPollAddress);
+	var ADDR = u256.toAddress(currentPollAddress);
+	var payload = bytes.fromString("vote",32);
+	var voteVal;
+	if(yesno == "1"){
+		voteVal = 1;	
+	} else if (yesno == "2"){
+		voteVal = 2;	
+	}
+	payload = bytes.concat(payload,u256.bytesOf(u256.value(voteVal)));
 	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), ADDR, payload, u256.value(100000), eth.gasPrice());	
 }
-*/
+
 
 /************************************
  *       User related stuff         *
