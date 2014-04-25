@@ -336,7 +336,7 @@ readContractMeta = function(contractData)
 generatePollTable = function(){
 
 	// Get tail at 0x18
-	var pointer = eth.storageAt(pollADDR,u256.value(24));
+	var pointer = eth.storageAt(dougADDR,u256.value(24));
 	
 	var pollAddrs = new Array();
 	var contractAddrs = new Array();
@@ -347,16 +347,16 @@ generatePollTable = function(){
 	while(!u256.isNull(pointer)){
 		var next = u256.add(pointer,u256.value(1));
 		pollAddrs[counter] = bytes.toString(u256.bytesOf(pointer));
-		pointer = eth.storageAt(pollADDR,pointer);
+		pointer = eth.storageAt(dougADDR,pointer);
 		contractAddrs[counter] = bytes.toString(u256.bytesOf(pointer));
-		pointer = eth.storageAt(pollADDR,pointer);
+		pointer = eth.storageAt(dougADDR,pointer);
 		contractNames[counter] = bytes.toString(u256.bytesOf(pointer));
 		
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
-		contractAddrs[counter] + ':' + pollAddr[counter] + '&quot;' + ');">' + nicks[j] + 
+		contractAddrs[counter] + ':' + pollAddr[counter] + '&quot;' + ');">' + contractNames[counter] + 
 		'</a></td></tr>';
 		
-		pointer = next;
+		pointer = eth.storageAt(dougADDR,next);
 		counter++;
 	}
 	
