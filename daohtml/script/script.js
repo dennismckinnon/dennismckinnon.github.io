@@ -24,6 +24,9 @@ var pollADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromStr
 
  
 var infohashes = new Array();
+var pollAddrs = new Array();
+var contractAddrs = new Array();
+var currentPollAddress = null;
 
 window.onload = function(){
 	
@@ -287,15 +290,13 @@ clearDocument = function()
  *         Consensus stuff          *
  ************************************/
 
-
-var currentPollAddress = null;
-
-readContractMeta = function(contractData)
+readContractMeta = function(contractDataSlot)
 {
-	var tokens = contractData.split(":");
+	var index = parseInt(contractDataSlot);
+	
 
-	var ADDR = key.addressOf(tokens[0]);
-	currentPollAddress = u256.fromAddress(tokens[1]);
+	var ADDR = key.addressOf(contractAddrs[index]);
+	currentPollAddress = pollAddrs[index];
 
 	var metaident = u256.toValue(eth.storageAt(ADDR, u256.value(0)));
 
@@ -332,9 +333,6 @@ readContractMeta = function(contractData)
 		document.getElementById('contractDescriptionTextArea').value = desc;
 	};
 }
-
-var pollAddrs = new Array();
-var contractAddrs = new Array();
 	
 generatePollTable = function(){
 
@@ -367,7 +365,7 @@ generatePollTable = function(){
 		contractNames[counter] = bytes.toString(u256.bytesOf(pointer));
 		
 		
-		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
+		table+='<tr><td><a href="javascript:void(0)" onclick="readContractMeta(' + '&quot;' + 
 		counter + '&quot;' + ');">' + contractNames[counter] + '</a></td></tr>';		
 		
 		pointer = eth.storageAt(dougADDR,next);
