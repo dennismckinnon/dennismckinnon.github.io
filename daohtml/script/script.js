@@ -428,7 +428,6 @@ promoteUser = function(){
 	
 	var command = bytes.fromString("regadm",32);
 	
-	var address256 = u256.fromAddress(key.addressOf(nickName));
 	var addrBytes = u256.bytesOf(getAddress256FromNick(userName));
 	
 	var payload = bytes.concat(command,addrBytes);
