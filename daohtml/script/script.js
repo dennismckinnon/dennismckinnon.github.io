@@ -497,7 +497,8 @@ generateUserTable = function(){
 			default:
 			  userTypeStr = "Admin";
 		}
-		var addressString = (u256.toValue(addrii[j])).toString(16);
+		var addressString = bytes.toString(u256.bytesOf(addrii[j]));
+		document.getElementById('userAddressInputField').value = addressString;
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
 		addressString + ':' + userPrivs[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
 		'</a></td><td>' + userTypeStr + '</td></tr>';
@@ -559,10 +560,7 @@ getMyNick = function(){
 
 // Returns user level as a number.
 getMyUserLevel = function(){
-	var myAddr256 = u256.fromAddress(key.address(eth.key()[0]));
-	if(u256.isNull(myAddr256)){
-		return 0;
-	}
+	var myAddr256 = u256.fromAddress(key.address(eth.keys()[0]));
 	return u256.toValue(eth.storageAt(adminADDR, myAddr256));
 }
 
