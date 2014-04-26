@@ -545,6 +545,13 @@ registerNickname = function(){
 		return;
 	}
 
+	var nickAddr256 = getAddress256FromNick(nameString);
+	
+	if(!u256.isNull(nickAddr256)){
+		window.alert("That nickname is already in use.");
+		return;
+	}
+
 	var command = bytes.fromString("reg",32);	
 	var nameBytes = bytes.fromString(nameString,32);
 	
