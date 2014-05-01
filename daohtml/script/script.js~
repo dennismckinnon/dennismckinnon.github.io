@@ -2,12 +2,10 @@
  *          Initialization          *
  ************************************/
 
-var dougADDR = key.addressOf("fc87f9b92b37b9b6133a22ff3352f72996de77eb");
-
-var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
-
-var dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
-var dtt = u256.toValue(dougTEST);
+var dougADDR = "0xfc87f9b92b37b9b6133a22ff3352f72996de77eb";
+/*
+var dougTEST = eth.storageAt(dougADDR, "doug".bin());
+var dtt = dougTEST
 var dat = u256.toValue(u256.fromAddress(dougADDR));
 
 while (dtt != dat){
@@ -16,11 +14,12 @@ while (dtt != dat){
 	dtt = u256.toValue(dougTEST);
 	dat = u256.toValue(u256.fromAddress(dougADDR));
 };
+*/
 
-var dbADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
-var adminADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
-var nickADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("nick",32))));
-var pollADDR = u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("pollcode",32))));
+var dbADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
+var adminADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
+var nickADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("nick",32))));
+var pollADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("pollcode",32))));
 
  
 var infohashes = new Array();
@@ -130,25 +129,25 @@ prepareDatabasePage = function(){
 }
 
 generateTable = function(){
-	//hi
-	var pointer1 = u256.value(32);
-	var pointer2 = u256.value(37);
-	var pointer3 = u256.value(38);
 	
-	var limit = u256.toValue(eth.storageAt(dbADDR, u256.value(21)));
+	var pointer1 = "0x20"
+	var pointer2 = "0x25"
+	var pointer3 = "0x26"
+	
+	var limit = hexToVal(eth.storageAt(dbADDR, "0x15"));
 	var titles = new Array();
 	infohashes = new Array();
 	
 	for (var i = 0; i < limit; i++) {
 		
-		var tstr = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer2)));
-		tstr = tstr + bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer3)));
+		var tstr = eth.storageAt(dbADDR, pointer2).bin();
+		tstr = tstr + eth.storageAt(dbADDR, pointer3).bin();
 		titles[i] = tstr;
 		infohashes[i] = eth.storageAt(dbADDR, pointer1);
 		
-		pointer1 = u256.add(pointer1, u256.value(32));
-		pointer2 = u256.add(pointer2, u256.value(32));
-		pointer3 = u256.add(pointer3, u256.value(32)); 
+		pointer1 = addHex(pointer1, "0x20");
+		pointer2 = addHex(pointer2, "0x20");
+		pointer3 = addHex(pointer3, "0x20"); 
 		
 	};
 	
@@ -169,33 +168,33 @@ resolveMagnetLink = function(hashIndex)
 	var index = parseInt(hashIndex);
 	var infohs = infohashes[index];
 	
-	var pointer = u256.add(infohs, eth.storageAt(dbADDR, u256.value(20)));
+	var pointer = addHex(infohs, eth.storageAt(dbADDR, "0x14"));
 	pointer = eth.storageAt(dbADDR, pointer);
 	
-	pointer = u256.add(pointer, u256.value(2));
+	pointer = addHex(pointer, "0x2");
 	
-	var uploader = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
+	var uploader = eth.storageAt(dbADDR, pointer).bin();
+	pointer = addHex(pointer, "0x1");
 	
-	var filetype = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
+	var filetype = eth.storageAt(dbADDR, pointer).bin();
+	pointer = addHex(pointer, "0x1");
 	
-	var filequality = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
+	var filequality = eth.storageAt(dbADDR, pointer).bin();
+	pointer = addHex(pointer, "0x1");
 	
-	var title1 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
-	pointer = u256.add(pointer, u256.value(1));
-	var title2 = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+	var title1 = eth.storageAt(dbADDR, pointer).bin();
+	pointer = addHex(pointer, "0x1");
+	var title2 = eth.storageAt(dbADDR, pointer).bin();
 	var title = title1 + title2;
 	
 	var desc = "";
 	for (var i = 0; i < 25; i++) {
-		pointer = u256.add(pointer, u256.value(1));
-		var temp = bytes.toString(u256.bytesOf(eth.storageAt(dbADDR, pointer)));
+		pointer = addHex(pointer, "0x1");
+		var temp = eth.storageAt(dbADDR, pointer).bin();
 		desc = desc + temp;
 	}
 	
-	document.getElementById('infohashInputField').value = (u256.toValue(infohs)).toString(16);
+	document.getElementById('infohashInputField').value = infohs.toString(16);
 	document.getElementById('uploaderInputField').value = uploader;
 	document.getElementById('filetypeInputField').value = filetype;
 	document.getElementById('filequalityInputField').value = filequality;
@@ -247,37 +246,30 @@ updateDocument = function()
 		return;
 	}
 	
-	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
-	var title = bytes.fromString(document.getElementById("titleInputField").value, 64);
-	var uploader = bytes.fromString(ulString, 32);
-	var filetype = bytes.fromString(document.getElementById("filetypeInputField").value, 32);
-	var filequality = bytes.fromString(document.getElementById("filequalityInputField").value, 32);
-	var descript = bytes.fromString(document.getElementById("descriptionTextArea").value, 800);
+	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(32);
+	var title = (document.getElementById("titleInputField").value).pad(32);
+	var uploader = ulString.pad(32);
+	var filetype = (document.getElementById("filetypeInputField").value).pad(32);
+	var filequality = (document.getElementById("filequalityInputField").pad(32);
+	var descript = (document.getElementById("descriptionTextArea").value).pad(800);
+	// TODO is this right?
+	var indicator = "0x111111";
+	var command = "moddbe".pad(32);
 	
-	var indicator = u256.bytesOf(u256.value(parseInt("111111", 16)));
-	var command = bytes.fromString("moddbe",32);
+	var payload = command + infohash + indicator + uploader + filetype + filequality + title + descript;
 	
-	var payload = command;
-	payload = bytes.concat(payload, infohash);
-	payload = bytes.concat(payload, indicator);
-	payload = bytes.concat(payload, uploader);
-	payload = bytes.concat(payload, filetype);
-	payload = bytes.concat(payload, filequality);
-	payload = bytes.concat(payload, title);
-	payload = bytes.concat(payload, descript);
-	
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());
+	eth.transact(key.secret(eth.keys()[0]), "0", dbADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
 
 };
 
 deleteDocument = function()
 {
-	var infohash = u256.bytesOf(u256.value(parseInt(document.getElementById("infohashInputField").value, 16)));
-	var command = bytes.fromString("deldbe",32);
+	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(32);
+	var command = "delbe".pad(32);
 
-	var payload = bytes.concat(command,infohash);
+	var payload = infohash + command;
 
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), dbADDR, payload, u256.value(100000), eth.gasPrice());	
+	eth.transact(key.secret(eth.keys()[0]), "0", dbADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);	
 	clearDocument();
 };
 
@@ -295,38 +287,37 @@ readContractMeta = function(contractDataSlot)
 	var index = parseInt(contractDataSlot);
 	
 
-	var ADDR = u256.toAddress(contractAddrs[index]);
+	var ADDR = contractAddrs[index];
 	currentPollAddress = pollAddrs[index];
 
-	var metaident = u256.toValue(eth.storageAt(ADDR, u256.value(0)));
-	//document.getElementById('contractCreator').value = metaident.toString(16);
+	var metaident = eth.storageAt(ADDR, "0x0");
 
-	if (metaident == 585546221227) {
-		var creat = key.stringOf(u256.toAddress(eth.storageAt(ADDR, u256.value(1))));
+	if (hexToVal(metaident) == 585546221227) {
+		var creat = (eth.storageAt(ADDR, "0x1").bin();
 
-		var auth = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(2))));
+		var auth = (eth.storageAt(ADDR, "0x2"))).bin();
 
-		var da = u256.toValue(eth.storageAt(ADDR, u256.value(3)));
+		var da = hexToVal(eth.storageAt(ADDR, "0x3"));
 		var d1 = da%65536;
 		var d2 = (Math.floor(da/65536))%256;
 		var d3 = (Math.floor(da/16777216))%256;
 		var date = d3.toString(16)+"/"+d2.toString(16)+"/"+d1.toString(16);
 
-		var ve = u256.toValue(eth.storageAt(ADDR, u256.value(4)));
+		var ve = hexToVal(eth.storageAt(ADDR, "0x4"));
 		var v1 = ve%65536;
 		var v2 = (Math.floor(ve/65536))%256;
 		var v3 = (Math.floor(ve/16777216))%256;
 		var vers = v3.toString(16)+"."+v2.toString(16)+"."+v1.toString(16);
 
-		var name = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(5))));;
+		var name = eth.storageAt(ADDR, "0x5").bin();
 
 		var desc = "";
 		for (var i = 6; i <= 15; i++) {
-			var temp = bytes.toString(u256.bytesOf(eth.storageAt(ADDR, u256.value(i))));
+			var temp = eth.storageAt(ADDR, valToHex(i)).bin();
 			desc = desc + temp;
 		}
 
-		document.getElementById('contractAddress').value = key.stringOf(u256.toAddress(contractAddrs[index]));
+		document.getElementById('contractAddress').value = contractAddrs[index];
 		document.getElementById('contractCreator').value = creat;
 		document.getElementById('contractAuthor').value = auth;
 		document.getElementById('contractDate').value = date;
@@ -340,12 +331,7 @@ readContractMeta = function(contractDataSlot)
 generatePollTable = function(){
 
 	// Get tail at 0x18
-	var pointer = eth.storageAt(dougADDR,u256.value(24));
-
-	
-	if(u256.isNull(pointer)){
-		document.getElementById('contractCreator').value = "null";		
-	}
+	var pointer = eth.storageAt(dougADDR,"0x18");
 
 	pollAddrs = new Array();
 	contractAddrs = new Array();
@@ -356,16 +342,15 @@ generatePollTable = function(){
 	
 	var counter = 0;
 	
-	while(!u256.isNull(pointer)){
-		var next = u256.add(pointer,u256.value(1));
-		
+	while(!isNull(pointer){
+		var next = addHex(pointer,"0x1");
 		
 		pollAddrs[counter] = pointer;
 		pointer = eth.storageAt(dougADDR,pointer);
 		
 		contractAddrs[counter] = pointer;
 		pointer = eth.storageAt(dougADDR,pointer);
-		contractNames[counter] = bytes.toString(u256.bytesOf(pointer));
+		contractNames[counter] = pointer.bin();
 		
 		
 		table+='<tr><td><a href="javascript:void(0)" onclick="readContractMeta(' + '&quot;' + 
@@ -383,16 +368,9 @@ generatePollTable = function(){
 
 
 vote = function(yesno){
-	var ADDR = u256.toAddress(currentPollAddress);
-	var payload = bytes.fromString("vote",32);
-	var voteVal;
-	if(yesno == "1"){
-		voteVal = 1;	
-	} else if (yesno == "2"){
-		voteVal = 2;	
-	}
-	payload = bytes.concat(payload,u256.bytesOf(u256.value(voteVal)));
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), ADDR, payload, u256.value(100000), eth.gasPrice());	
+	var ADDR = currentPollAddress;
+	var payload = "vote".pad(32) + yesno;
+	eth.transact(key.secret(eth.keys()[0]), "0", ADDR, payload, "(100000", eth.gasPrice(), dummyTransCallback);	
 }
 
 
@@ -419,13 +397,9 @@ removeUser = function(){
 		return;
 	}
 	
-	var command = bytes.fromString("dereg",32);	
-	var nameBytes = bytes.fromString(userName,32);
-	
+	var payload = "dereg".pad(32) + userName;
 
-	var payload = bytes.concat(command,nameBytes);
-
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), nickADDR, payload, u256.value(100000), eth.gasPrice());
+	eth.transact(key.secret(eth.keys()[0]), "0", nickADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
 	
 }
 
@@ -445,13 +419,9 @@ promoteUser = function(){
 		return;	
 	}
 	
-	var command = bytes.fromString("regadm",32);
-	
-	var addrBytes = u256.bytesOf(getAddress256FromNick(userName));
-	
-	var payload = bytes.concat(command,addrBytes);
+	var payload = "regadm".pad(32) + userName;
 
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), adminADDR, payload, u256.value(100000), eth.gasPrice());
+	eth.transact(key.secret(eth.keys()[0]), "0", adminADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
 	
 }
 
@@ -469,35 +439,30 @@ deleteMe = function(){
 		}
 	}
 	
-	var payload = bytes.fromString("dereg",32);
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), nickADDR, payload, u256.value(100000), eth.gasPrice());
+	var payload = "dereg"
+	eth.transact(key.secret(eth.keys()[0]), "0", nickADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
 	window.alert("Your account will be removed shortly.");
 }
 
 generateUserTable = function(){
 	
-	var pointer = u256.value(18); // Tail
+	var pointer = "0x12"; // Tail
 	// Size of the linked list.
-	var size = u256.toValue(eth.storageAt(nickADDR, u256.value(17)));
+	var size = hexToVal(eth.storageAt(nickADDR, "0x11"));
 	var nicks = new Array();
 	var addrii = new Array(); // Deal with it
 	var userPrivs = new Array();
 	
-	
-	// We need to jump past the tail, as it is only the contract nick.	
-	// pointer = eth.storageAt(nickADDR, pointer);
-	// pointer = u256.add(pointer, u256.value(2));
-	
 	for (var i = 0; i < size; i++) {
 		pointer = eth.storageAt(nickADDR, pointer);
-		var nick = bytes.toString(u256.bytesOf(pointer));
+		var nick = pointer.bin();
 		nicks[i] = nick;
 		addrii[i] = eth.storageAt(nickADDR,pointer);
 		// Get the address of the user.
 		var priv = eth.storageAt(adminADDR, addrii[i]);
 		
-		userPrivs[i] = u256.toValue(priv);
-		pointer = u256.add(pointer, u256.value(2));
+		userPrivs[i] = hexToVal(priv);
+		pointer = addHex(pointer, "0x2");
 	};
 	
 	var table= "<table><tr><td>Nickname</td><td>Type</td></tr>";
@@ -515,9 +480,8 @@ generateUserTable = function(){
 			default:
 			  userTypeStr = "Admin";
 		}
-		var addressString = key.stringOf(u256.toAddress(addrii[j]));
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
-		addressString + ':' + userPrivs[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
+		addrii[j] + ':' + userPrivs[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
 		'</a></td><td>' + userTypeStr + '</td></tr>';
 	}
 	
@@ -529,7 +493,7 @@ generateUserTable = function(){
 resolveUserLink = function(userName)
 {
 	var tokens = userName.split(':');
-	document.getElementById('userAddressInputField').value = tokens[0];
+	document.getElementById('userAddressInputField').value = tokens[0].substring(2);
 	if(tokens[1] == "3"){
 		document.getElementById('adminRadio').checked = true;		
 	} else {
@@ -545,13 +509,15 @@ registerNickname = function(){
 		return;
 	}
 
-	var command = bytes.fromString("reg",32);	
-	var nameBytes = bytes.fromString(nameString,32);
+	var nickAddr = getAddressFromNick(nameString);
 	
+	if(!isNull(nickAddr256)){
+		window.alert("That nickname is already in use.");
+		return;
+	}
+	var payload = "reg".pad(32) + nameBytes;
 
-	var payload = bytes.concat(command,nameBytes);
-
-	eth.transact(key.secret(eth.keys()[0]), u256.ether(0), nickADDR, payload, u256.value(100000), eth.gasPrice());
+	eth.transact(key.secret(eth.keys()[0]), "0", nickADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
 	
 }
 
@@ -560,29 +526,73 @@ registerNickname = function(){
  ************************************/
 
 // Returns nickname as a u256 object.
-getMyNick256 = function(){
-	var myAddr256 = u256.fromAddress(key.address(eth.key()));
-	var myNick256 = eth.storageAt(nickADDR, myAddr256);
-	if(u256.isNull(myNick256)) {
-		return u256.value(0);
+getMyNickHex = function(){
+	var myAddr = key.address(eth.key());
+	var myNickHex = eth.storageAt(nickADDR, myAddr);
+	if(isNull(myNick256)) {
+		return "0x0"
 	}
-	return myNick256;
+	return myNick;
 }
 
 // Returns nickname as a string.
 getMyNick = function(){
-	var myNick256 = getMyNick256();
-	return bytes.toString(u256.bytesOf(myNick256));
+	var myNameHex = getMyNickHex();
+	if(myNameHex == "0x0"){
+		return "";
+	}
+	return myNameHex.bin();
 }
 
 // Returns user level as a number.
 getMyUserLevel = function(){
-	var myAddr256 = u256.fromAddress(key.address(eth.keys()[0]));
-	return u256.toValue(eth.storageAt(adminADDR, myAddr256));
+	var myAddr = key.address(eth.keys()[0]);
+	return hexToVal(eth.storageAt(adminADDR, myAddr));
 }
 
-getAddress256FromNick = function(nickName){
-	var nick256 = bytes.u256of(bytes.fromString(nickName,32));
-	return eth.storageAt(nickADDR,nick256);
+getAddressFromNick = function(nickName){
+	return eth.storageAt(nickADDR,nickName.unbin());
 }
+
+/************************************
+ *     DOUG utility functions       *
+ ************************************/
+
+// Takes two integer strings, turns them into decimal numbers, adds, then return the sum as an integer string.
+add = function(val1,val2){
+	return (parseInt(val1) + parseInt(val2)).toString();
+}
+
+// Adds two hex numbers (as strings) and returns a new hex string
+addHex = function(hex1,hex2){
+	return (parseInt(hex1,16) + parseInt(hex2,16)).toString(16);
+}
+
+// Takes two integer strings, turns them into decimal numbers, subtracts, then return the sum as an integer string.
+sub = function(val1,val2){
+	return (parseInt(val1) - parseInt(val2)).toString();
+}
+
+// Subtract two hex numbers (as strings) and returns a new hex string
+subHex = function(hex1,hex2){
+	return (parseInt(hex1,16) - parseInt(hex2,16)).toString(16);
+}
+
+// Checks if a hex-string is 0
+isNull = function(hex){
+	return (hex == "0x") ? true : false;
+}
+
+// Takes a hex-string and returns its integer decimal value as a number.
+hexToVal = function(hex){
+	return parseInt(hex,16);
+}
+
+// takes a decimal number and turns it into a proper hex string ("0x" + hexStr)
+valToHex = function(val){
+	return "0x" + val.toString(16);
+}
+
+dummyTransCallback = function(){}
+
 
