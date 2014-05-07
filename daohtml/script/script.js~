@@ -26,7 +26,6 @@ var adminADDR = eth.storageAt(dougADDR, "user");
 var nickADDR = eth.storageAt(dougADDR, "nick");
 var pollADDR = null;
 
- 
 var infohashes = new Array();
 var pollAddrs = new Array();
 var contractAddrs = new Array();
@@ -103,7 +102,6 @@ switchPage = function(callerID){
 		
 	}
 	
-
 }
 
 /************************************
@@ -145,7 +143,7 @@ prepareDatabasePage = function(){
 	document.getElementById('descriptionTextArea').value = "";
 	
 	//TODO remove this
-	document.getElementById('infohashInputField').value = dbADDR;
+	//document.getElementById('infohashInputField').value = dbADDR;
 	
 }
 
@@ -156,7 +154,10 @@ generateTable = function(){
 	var pointer3 = "0x26";
 	
 	var limitHex = eth.storageAt(dbADDR, "0x15");
-	var limit = hexToVal(isNull(limitHex) ? "0x0" : limitHex);
+	if(isNull(limitHex)){
+		return;
+	}
+	var limit = hexToVal(limitHex);
 	var titles = new Array();
 	infohashes = new Array();
 	
@@ -165,11 +166,11 @@ generateTable = function(){
 		var tstr = eth.storageAt(dbADDR, pointer2).bin();
 		tstr = tstr + eth.storageAt(dbADDR, pointer3).bin();
 		titles[i] = tstr;
-		infohashes[i] = eth.storageAt(dbADDR, pointer1);
+		infohashes[i] = pointer1;
 		
-		pointer1 = addHex(pointer1, "0x20");
-		pointer2 = addHex(pointer2, "0x20");
-		pointer3 = addHex(pointer3, "0x20"); 
+		pointer1 = addHex(pointer1, "0x20" );
+		pointer2 = addHex(pointer2, "0x20" );
+		pointer3 = addHex(pointer3, "0x20" ); 
 		
 	};
 	
@@ -190,14 +191,11 @@ resolveMagnetLink = function(hashIndex)
 	
 	var index = parseInt(hashIndex);
 	var infohs = infohashes[index];
+	// Quick dirty edit. Nothing to see here.
+	var pointer = infohs;
 	
-	var ptrStrt = eth.storageAt(dbADDR, "0x14");
-	
-	if(!isNull(ptrStrt)){
-		var pointer = addHex(infohs, ptrStrt);
-	}
-	pointer = eth.storageAt(dbADDR, pointer);
-	
+	infohs = eth.storageAt(dbADDR,infohs).bin();
+		
 	pointer = addHex(pointer, "0x2");
 	
 	var uploader = eth.storageAt(dbADDR, pointer).bin();
@@ -221,7 +219,7 @@ resolveMagnetLink = function(hashIndex)
 		desc = desc + temp;
 	}
 	
-	document.getElementById('infohashInputField').value = infohs.substring(2);
+	document.getElementById('infohashInputField').value = infohs;
 	document.getElementById('uploaderInputField').value = uploader;
 	document.getElementById('filetypeInputField').value = filetype;
 	document.getElementById('filequalityInputField').value = filequality;
@@ -276,27 +274,28 @@ updateDocument = function()
 	//	return;
 	//}
 	
-	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(0,32);
-	var title = (document.getElementById("titleInputField").value).unbin().pad(0,32);
+	var infohash = (document.getElementById("infohashInputField").value).unbin().pad(0,32);
+		
+	var title = (document.getElementById("titleInputField").value).unbin().pad(0,64);
 	var uploader = myNick.unbin().pad(0,32);
 	var filetype = (document.getElementById("filetypeInputField").value).unbin().pad(0,32);
 	var filequality = (document.getElementById("filequalityInputField").value).unbin().pad(0,32);
 	var descript = (document.getElementById("descriptionTextArea").value).unbin().pad(0,800);
 	
-	// TODO is this right?
-	var indicator = "0x111111".pad(0,32);
+	var indicator = "0x111111".pad(32);
 	var command = "moddbe".unbin().pad(0,32);
 	
 	var payload = command + infohash + indicator + uploader + filetype + filequality + title + descript;
 	
 	eth.transact(eth.key, "0", dbADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
-
-};
+	
+	
+}
 
 deleteDocument = function()
 {
 	
-	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(0,32);
+	var infohash = (document.getElementById("infohashInputField").value).unbin().pad(0,32);
 	var command = toPayload("delbe");
 
 	var payload = command + infohash;
@@ -304,14 +303,13 @@ deleteDocument = function()
 	eth.transact(eth.key, "0", dbADDR, payload, "100000", eth.gasPrice, dummyTransCallback);	
 	clearDocument();
 	
-};
+}
 
 clearDocument = function()
 {
 	
 	prepareDatabasePage();
-	
-};
+}
 
 /************************************
  *         Consensus stuff          *
@@ -502,7 +500,7 @@ generateUserTable = function(){
 		// Get the address of the user.
 		var priv = eth.storageAt(adminADDR, addrii[i]);
 		
-		userPrivs[i] = hexToVal(priv);
+		userPrivs[i] = isNull(priv) ? 0 : hexToVal(priv);
 		pointer = addHex(pointer, "0x2");
 	};
 	
