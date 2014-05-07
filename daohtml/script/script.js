@@ -24,7 +24,7 @@ while (dtt != dat){
 var dbADDR = eth.storageAt(dougADDR, "magdb");
 var adminADDR = eth.storageAt(dougADDR, "user");
 var nickADDR = eth.storageAt(dougADDR, "nick");
-var pollADDR = null;
+var pollADDR = eth.storageAt(dougADDR, "pollcode");
 
 var infohashes = new Array();
 var pollAddrs = new Array();
@@ -253,7 +253,7 @@ resolveMagnetLink = function(hashIndex)
 			if(myLevel > 1){				
 				document.getElementById('deleteDocumentButton').style.display = "block";			
 			} else {
-				document.getElementById('deleteDocumentButton').style.display = "block";			
+				document.getElementById('deleteDocumentButton').style.display = "none";			
 			}
 		}
 		document.getElementById('createDocumentButton').style.display = "none";
@@ -317,7 +317,7 @@ clearDocument = function()
 
 readContractMeta = function(contractDataSlot)
 {
-	/*
+	
 	var index = parseInt(contractDataSlot);
 	
 
@@ -359,11 +359,11 @@ readContractMeta = function(contractDataSlot)
 		document.getElementById('contractName').value = name;
 		document.getElementById('contractDescriptionTextArea').value = desc;
 	};
-	*/
+	
 }
 	
 generatePollTable = function(){
-/*
+
 	// Get tail at 0x18
 	var pointer = eth.storageAt(dougADDR,"0x18");
 
@@ -376,7 +376,7 @@ generatePollTable = function(){
 	
 	var counter = 0;
 	
-	while(!isNull(pointer){
+	while(!isNull(pointer)){
 		var next = addHex(pointer,"0x1");
 		
 		pollAddrs[counter] = pointer;
@@ -389,24 +389,25 @@ generatePollTable = function(){
 		
 		table+='<tr><td><a href="javascript:void(0)" onclick="readContractMeta(' + '&quot;' + 
 		counter + '&quot;' + ');">' + contractNames[counter] + '</a></td></tr>';		
+		if(isNull(next)){
+			pointer = eth.storageAt(dougADDR,next);	
+		} else {
+			pointer = "0x";
+		}
 		
-		pointer = eth.storageAt(dougADDR,next);
 		counter++;
 	}
 	
 	table+="</table>";
 	document.getElementById('pollTable').innerHTML = table;
-	*/
 }
 
-
-
 vote = function(yesno){
-	/*
+	var yn = (yesno == "2") ? "0x2" : "0x1";
 	var ADDR = currentPollAddress;
-	var payload = "vote".pad(32) + yesno;
-	eth.transact(key.secret(eth.keys()[0]), "0", ADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
-	*/	
+	var payload = "vote".unbin().pad(0,32) + yn.pad(32);
+	eth.transact(eth.key, "0", ADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
+	
 }
 
 
@@ -456,7 +457,11 @@ promoteUser = function(){
 		return;	
 	}
 	
-	var payload = "regadm".unbin().pad(0,32) + userName.unbin().pad(0,32);
+	var userAddress = eth.storageAt(nickADDR,userName);
+	if(isNull(userAddress)){
+		return;
+	}
+	var payload = "regadm".unbin().pad(0,32) + userAddress.pad(0,32);
 
 	eth.transact(eth.key, "0", adminADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
 	
