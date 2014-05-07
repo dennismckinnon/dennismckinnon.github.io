@@ -2,24 +2,29 @@
  *          Initialization          *
  ************************************/
 
-var dougADDR = "0xfc87f9b92b37b9b6133a22ff3352f72996de77eb";
-/*
-var dougTEST = eth.storageAt(dougADDR, "doug".bin());
-var dtt = dougTEST
-var dat = u256.toValue(u256.fromAddress(dougADDR));
+
+
+
+var dougADDR = "0xb151e7bc0da69909125586dd570cc2ab8a94661f";
+
+var dougName = "doug";
+
+
+var dougTEST = eth.storageAt(dougADDR, dougName);
+
+var dtt = dougTEST;
+var dat = dougADDR;
 
 while (dtt != dat){
-	dougADDR = u256.toAddress(dougTEST)
-	dougTEST = eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("doug",32)));
-	dtt = u256.toValue(dougTEST);
-	dat = u256.toValue(u256.fromAddress(dougADDR));
+	dougADDR = dougTEST;
+	dtt = eth.storageAt(dougADDR,dougName); 
+	dat = dougADDR;
 };
-*/
 
-var dbADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("magdb",32))));
-var adminADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("user",32))));
-var nickADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("nick",32))));
-var pollADDR = null;//u256.toAddress(eth.storageAt(dougADDR, bytes.u256of(bytes.fromString("pollcode",32))));
+var dbADDR = eth.storageAt(dougADDR, "magdb");
+var adminADDR = eth.storageAt(dougADDR, "user");
+var nickADDR = eth.storageAt(dougADDR, "nick");
+var pollADDR = null;
 
  
 var infohashes = new Array();
@@ -27,15 +32,21 @@ var pollAddrs = new Array();
 var contractAddrs = new Array();
 var currentPollAddress = null;
 
+var nicks = new Array();
+var userPerms = new Array();
+var addrii = new Array();
+
 window.onload = function(){
 	
 	var myNick = getMyNick();
 	
-	if(myNick == null || myNick == ""){
+	if(myNick == ""){
 			document.getElementById("adminLinkL").innerHTML = "Register";
 	}
+	
 	prepareDatabasePage();
 }
+
 
 /************************************
  *              Menu                *
@@ -54,11 +65,13 @@ switchPage = function(callerID){
 		document.getElementById("containerConsensus").style.display = "block";
 		document.getElementById("containerAbout").style.display = "none";
 		document.getElementById("containerAdmin").style.display = "none";
-		if(getMyAdminLevel() > 1){
+		
+		if(getMyUserLevel() > 1){
 			document.getElementById("pollViewMenu").style.display = "block";
 		} else {
 			document.getElementById("pollViewMenu").style.display = "none";
 		}
+		
 	} else if(callerID == "2"){
 		document.getElementById("containerDatabase").style.display = "none";
 		document.getElementById("containerConsensus").style.display = "none";
@@ -78,15 +91,18 @@ switchPage = function(callerID){
 			document.getElementById("registerSection").style.display = "none";
 			document.getElementById("adminEditSection").style.display = "block";
 			document.getElementById("userTableSection").style.display = "block";
-			// If I'm an admin.			
+			// If I'm an admin.
+						
 			if (getMyUserLevel() > 1) {
 				document.getElementById("adminButtons").style.display = "block";
 			} else {
 				document.getElementById("adminButtons").style.display = "none";			
 			}
+			
 		}
 		
 	}
+	
 
 }
 
@@ -95,7 +111,9 @@ switchPage = function(callerID){
  ************************************/
 
 prepareDatabasePage = function(){
+	
 	var myNick = getMyNick();
+	
 	if(myNick == ""){
 		// Fix the input fields.
 		document.getElementById('infohashInputField').disabled = true;
@@ -109,7 +127,7 @@ prepareDatabasePage = function(){
 		
 	} else {
 		document.getElementById('infohashInputField').disabled = false;
-		document.getElementById('uploaderInputField').disabled = false;
+		document.getElementById('uploaderInputField').disabled = true;
 		document.getElementById('filetypeInputField').disabled = false;
 		document.getElementById('filequalityInputField').disabled = false;
 		document.getElementById('titleInputField').disabled = false;
@@ -126,15 +144,19 @@ prepareDatabasePage = function(){
 	document.getElementById('titleInputField').value = "";
 	document.getElementById('descriptionTextArea').value = "";
 	
+	//TODO remove this
+	document.getElementById('infohashInputField').value = dbADDR;
+	
 }
 
 generateTable = function(){
 	
-	var pointer1 = "0x20"
-	var pointer2 = "0x25"
-	var pointer3 = "0x26"
+	var pointer1 = "0x20";
+	var pointer2 = "0x25";
+	var pointer3 = "0x26";
 	
-	var limit = hexToVal(eth.storageAt(dbADDR, "0x15"));
+	var limitHex = eth.storageAt(dbADDR, "0x15");
+	var limit = hexToVal(isNull(limitHex) ? "0x0" : limitHex);
 	var titles = new Array();
 	infohashes = new Array();
 	
@@ -160,15 +182,20 @@ generateTable = function(){
 	
 	table+="</table>";
 	document.getElementById('datatable').innerHTML = table;
-
+	
 }
 
 resolveMagnetLink = function(hashIndex)
 {
+	
 	var index = parseInt(hashIndex);
 	var infohs = infohashes[index];
 	
-	var pointer = addHex(infohs, eth.storageAt(dbADDR, "0x14"));
+	var ptrStrt = eth.storageAt(dbADDR, "0x14");
+	
+	if(!isNull(ptrStrt)){
+		var pointer = addHex(infohs, ptrStrt);
+	}
 	pointer = eth.storageAt(dbADDR, pointer);
 	
 	pointer = addHex(pointer, "0x2");
@@ -194,7 +221,7 @@ resolveMagnetLink = function(hashIndex)
 		desc = desc + temp;
 	}
 	
-	document.getElementById('infohashInputField').value = infohs.toString(16);
+	document.getElementById('infohashInputField').value = infohs.substring(2);
 	document.getElementById('uploaderInputField').value = uploader;
 	document.getElementById('filetypeInputField').value = filetype;
 	document.getElementById('filequalityInputField').value = filequality;
@@ -239,43 +266,51 @@ resolveMagnetLink = function(hashIndex)
 
 updateDocument = function()
 {
+	
 	var ulString = document.getElementById("uploaderInputField").value;
 	var myNick = getMyNick();
-	if(ulString != myNick){
-		window.alert("The uploader name must match your nickname (" + myNick + ").");
-		return;
-	}
+	//document.getElementById("infohashInputField").value = myNick;
 	
-	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(32);
-	var title = (document.getElementById("titleInputField").value).pad(32);
-	var uploader = ulString.pad(32);
-	var filetype = (document.getElementById("filetypeInputField").value).pad(32);
-	var filequality = (document.getElementById("filequalityInputField").pad(32);
-	var descript = (document.getElementById("descriptionTextArea").value).pad(800);
+	//if(ulString != myNick){
+	//	window.alert("The uploader name must match your nickname (" + myNick + ").");
+	//	return;
+	//}
+	
+	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(0,32);
+	var title = (document.getElementById("titleInputField").value).unbin().pad(0,32);
+	var uploader = myNick.unbin().pad(0,32);
+	var filetype = (document.getElementById("filetypeInputField").value).unbin().pad(0,32);
+	var filequality = (document.getElementById("filequalityInputField").value).unbin().pad(0,32);
+	var descript = (document.getElementById("descriptionTextArea").value).unbin().pad(0,800);
+	
 	// TODO is this right?
-	var indicator = "0x111111";
-	var command = "moddbe".pad(32);
+	var indicator = "0x111111".pad(0,32);
+	var command = "moddbe".unbin().pad(0,32);
 	
 	var payload = command + infohash + indicator + uploader + filetype + filequality + title + descript;
 	
-	eth.transact(key.secret(eth.keys()[0]), "0", dbADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
+	eth.transact(eth.key, "0", dbADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
 
 };
 
 deleteDocument = function()
 {
-	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(32);
-	var command = "delbe".pad(32);
+	
+	var infohash = ("0x" + document.getElementById("infohashInputField").value).pad(0,32);
+	var command = toPayload("delbe");
 
-	var payload = infohash + command;
+	var payload = command + infohash;
 
-	eth.transact(key.secret(eth.keys()[0]), "0", dbADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);	
+	eth.transact(eth.key, "0", dbADDR, payload, "100000", eth.gasPrice, dummyTransCallback);	
 	clearDocument();
+	
 };
 
 clearDocument = function()
 {
+	
 	prepareDatabasePage();
+	
 };
 
 /************************************
@@ -284,6 +319,7 @@ clearDocument = function()
 
 readContractMeta = function(contractDataSlot)
 {
+	/*
 	var index = parseInt(contractDataSlot);
 	
 
@@ -293,9 +329,9 @@ readContractMeta = function(contractDataSlot)
 	var metaident = eth.storageAt(ADDR, "0x0");
 
 	if (hexToVal(metaident) == 585546221227) {
-		var creat = (eth.storageAt(ADDR, "0x1").bin();
+		var creat = (eth.storageAt(ADDR, "0x1")).bin();
 
-		var auth = (eth.storageAt(ADDR, "0x2"))).bin();
+		var auth = (eth.storageAt(ADDR, "0x2")).bin();
 
 		var da = hexToVal(eth.storageAt(ADDR, "0x3"));
 		var d1 = da%65536;
@@ -325,11 +361,11 @@ readContractMeta = function(contractDataSlot)
 		document.getElementById('contractName').value = name;
 		document.getElementById('contractDescriptionTextArea').value = desc;
 	};
-	
+	*/
 }
 	
 generatePollTable = function(){
-
+/*
 	// Get tail at 0x18
 	var pointer = eth.storageAt(dougADDR,"0x18");
 
@@ -362,15 +398,17 @@ generatePollTable = function(){
 	
 	table+="</table>";
 	document.getElementById('pollTable').innerHTML = table;
-	
+	*/
 }
 
 
 
 vote = function(yesno){
+	/*
 	var ADDR = currentPollAddress;
 	var payload = "vote".pad(32) + yesno;
-	eth.transact(key.secret(eth.keys()[0]), "0", ADDR, payload, "(100000", eth.gasPrice(), dummyTransCallback);	
+	eth.transact(key.secret(eth.keys()[0]), "0", ADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
+	*/	
 }
 
 
@@ -379,6 +417,7 @@ vote = function(yesno){
  ************************************/
 
 removeUser = function(){
+	
 	var userName = document.getElementById("userNicknameInputField").value;
 
 	if(userName == null || userName == ""){
@@ -397,9 +436,9 @@ removeUser = function(){
 		return;
 	}
 	
-	var payload = "dereg".pad(32) + userName;
+	var payload = "dereg".unbin().pad(0,32) + userName.unbin().pad(0,32);
 
-	eth.transact(key.secret(eth.keys()[0]), "0", nickADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
+	eth.transact(eth.key, "0", nickADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
 	
 }
 
@@ -419,13 +458,14 @@ promoteUser = function(){
 		return;	
 	}
 	
-	var payload = "regadm".pad(32) + userName;
+	var payload = "regadm".unbin().pad(0,32) + userName.unbin().pad(0,32);
 
-	eth.transact(key.secret(eth.keys()[0]), "0", adminADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
+	eth.transact(eth.key, "0", adminADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
 	
 }
 
 deleteMe = function(){
+	
 	var sure = confirm("Are you sure you want to delete your own account?");	
 	if(!sure){
 		window.alert("Account not deleted.");
@@ -439,9 +479,10 @@ deleteMe = function(){
 		}
 	}
 	
-	var payload = "dereg"
-	eth.transact(key.secret(eth.keys()[0]), "0", nickADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
+	var payload = "dereg".unbin().pad(0,32);
+	eth.transact(eth.key, "0", nickADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
 	window.alert("Your account will be removed shortly.");
+	
 }
 
 generateUserTable = function(){
@@ -449,9 +490,9 @@ generateUserTable = function(){
 	var pointer = "0x12"; // Tail
 	// Size of the linked list.
 	var size = hexToVal(eth.storageAt(nickADDR, "0x11"));
-	var nicks = new Array();
-	var addrii = new Array(); // Deal with it
-	var userPrivs = new Array();
+	nicks = new Array();
+	addrii = new Array(); // Deal with it
+	userPrivs = new Array();
 	
 	for (var i = 0; i < size; i++) {
 		pointer = eth.storageAt(nickADDR, pointer);
@@ -480,9 +521,9 @@ generateUserTable = function(){
 			default:
 			  userTypeStr = "Admin";
 		}
+		
 		table+='<tr><td><a href="javascript:void(0)" onclick="resolveUserLink(' + '&quot;' + 
-		addrii[j] + ':' + userPrivs[j].toString() + ':' + nicks[j] + '&quot;' + ');">' + nicks[j] + 
-		'</a></td><td>' + userTypeStr + '</td></tr>';
+		j + '&quot;' + ');">' + nicks[j] + '</a></td><td>' + userTypeStr + '</td></tr>';
 	}
 	
 	table+="</table>";
@@ -490,19 +531,21 @@ generateUserTable = function(){
 	
 }
 
-resolveUserLink = function(userName)
+resolveUserLink = function(userIndex)
 {
-	var tokens = userName.split(':');
-	document.getElementById('userAddressInputField').value = tokens[0].substring(2);
-	if(tokens[1] == "3"){
+	var index = parseInt(userIndex);
+	document.getElementById('userAddressInputField').value = addrii[index];
+	if(userPrivs[index] == "3"){
 		document.getElementById('adminRadio').checked = true;		
 	} else {
 		document.getElementById('userRadio').checked = true;	
 	}
-		document.getElementById('userNicknameInputField').value = tokens[2];
+		document.getElementById('userNicknameInputField').value = nicks[index];
+	
 }
 
 registerNickname = function(){
+	
 	var nameString = document.getElementById("registerNicknameInputField").value;
 	if(nameString == null || nameString == ""){
 		window.alert("There is no name in the nickname field.");
@@ -511,13 +554,14 @@ registerNickname = function(){
 
 	var nickAddr = getAddressFromNick(nameString);
 	
-	if(!isNull(nickAddr256)){
+	if(!isNull(nickAddr)){
 		window.alert("That nickname is already in use.");
 		return;
 	}
-	var payload = "reg".pad(32) + nameBytes;
-
-	eth.transact(key.secret(eth.keys()[0]), "0", nickADDR, payload, "100000", eth.gasPrice(), dummyTransCallback);
+	
+	var payload = "reg".unbin().pad(0,32) + nameString.unbin().pad(0,32);
+	//document.getElementById("registerNicknameInputField").value = payload;
+	eth.transact(eth.key, "0", nickADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
 	
 }
 
@@ -527,12 +571,12 @@ registerNickname = function(){
 
 // Returns nickname as a u256 object.
 getMyNickHex = function(){
-	var myAddr = key.address(eth.key());
+	var myAddr = eth.secretToAddress(eth.key);
 	var myNickHex = eth.storageAt(nickADDR, myAddr);
-	if(isNull(myNick256)) {
-		return "0x0"
+	if(isNull(myNickHex)) {
+		return "0x0";
 	}
-	return myNick;
+	return myNickHex;
 }
 
 // Returns nickname as a string.
@@ -541,17 +585,26 @@ getMyNick = function(){
 	if(myNameHex == "0x0"){
 		return "";
 	}
-	return myNameHex.bin();
+	return myNameHex.bin().trim();
+	
 }
 
 // Returns user level as a number.
 getMyUserLevel = function(){
-	var myAddr = key.address(eth.keys()[0]);
-	return hexToVal(eth.storageAt(adminADDR, myAddr));
+	
+	var myAddr = eth.secretToAddress(eth.key);
+	var myLevHex = eth.storageAt(adminADDR, myAddr);
+	
+	if(isNull(myLevHex)){
+		return 0;
+	}
+	return hexToVal(myLevHex);
 }
 
 getAddressFromNick = function(nickName){
-	return eth.storageAt(nickADDR,nickName.unbin());
+	
+	return eth.storageAt(nickADDR,nickName);
+	
 }
 
 /************************************
@@ -560,22 +613,22 @@ getAddressFromNick = function(nickName){
 
 // Takes two integer strings, turns them into decimal numbers, adds, then return the sum as an integer string.
 add = function(val1,val2){
-	return (parseInt(val1) + parseInt(val2)).toString();
+	return BigInteger(val1).add(val2).toString();
 }
 
 // Adds two hex numbers (as strings) and returns a new hex string
 addHex = function(hex1,hex2){
-	return (parseInt(hex1,16) + parseInt(hex2,16)).toString(16);
+	return "0x" + BigInteger(hex1).add(hex2).toString(16);
 }
 
 // Takes two integer strings, turns them into decimal numbers, subtracts, then return the sum as an integer string.
 sub = function(val1,val2){
-	return (parseInt(val1) - parseInt(val2)).toString();
+	return BigInteger(val1).subtract(val2).toString();;
 }
 
 // Subtract two hex numbers (as strings) and returns a new hex string
 subHex = function(hex1,hex2){
-	return (parseInt(hex1,16) - parseInt(hex2,16)).toString(16);
+	return "0x" + BigInteger(hex1).subtract(hex2).toString(16);
 }
 
 // Checks if a hex-string is 0
@@ -591,6 +644,14 @@ hexToVal = function(hex){
 // takes a decimal number and turns it into a proper hex string ("0x" + hexStr)
 valToHex = function(val){
 	return "0x" + val.toString(16);
+}
+
+toPayload = function(someText){
+	return toPayloadSz(someText,32);
+}
+
+toPayloadSz = function(someText,sz){
+	return someText.unbin().pad(0,sz);
 }
 
 dummyTransCallback = function(){}
