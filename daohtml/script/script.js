@@ -24,7 +24,7 @@ while (dtt != dat){
 var dbADDR = eth.storageAt(dougADDR, "magdb");
 var adminADDR = eth.storageAt(dougADDR, "user");
 var nickADDR = eth.storageAt(dougADDR, "nick");
-var pollADDR = eth.storageAt(dougADDR, "pollcode");
+var pollADDR = eth.storageAt(dougADDR, "pollcodes");
 
 var infohashes = new Array();
 var pollAddrs = new Array();
@@ -143,7 +143,7 @@ prepareDatabasePage = function(){
 	document.getElementById('descriptionTextArea').value = "";
 	
 	//TODO remove this
-	//document.getElementById('infohashInputField').value = dbADDR;
+	document.getElementById('infohashInputField').value = pollADDR;
 	
 }
 
@@ -325,29 +325,32 @@ readContractMeta = function(contractDataSlot)
 	currentPollAddress = pollAddrs[index];
 
 	var metaident = eth.storageAt(ADDR, "0x0");
-
+	
 	if (hexToVal(metaident) == 585546221227) {
-		var creat = (eth.storageAt(ADDR, "0x1")).bin();
+		
+		var creat = eth.storageAt(ADDR, "1").substring(2);
 
-		var auth = (eth.storageAt(ADDR, "0x2")).bin();
+		//var auth = "0x88554646ab".unbin();
+		
+		var auth = eth.storageAt(ADDR, "2").bin();
 
-		var da = hexToVal(eth.storageAt(ADDR, "0x3"));
+		var da = hexToVal(eth.storageAt(ADDR, "3"));
 		var d1 = da%65536;
 		var d2 = (Math.floor(da/65536))%256;
 		var d3 = (Math.floor(da/16777216))%256;
 		var date = d3.toString(16)+"/"+d2.toString(16)+"/"+d1.toString(16);
 
-		var ve = hexToVal(eth.storageAt(ADDR, "0x4"));
+		var ve = hexToVal(eth.storageAt(ADDR, "4"));
 		var v1 = ve%65536;
 		var v2 = (Math.floor(ve/65536))%256;
 		var v3 = (Math.floor(ve/16777216))%256;
 		var vers = v3.toString(16)+"."+v2.toString(16)+"."+v1.toString(16);
 
-		var name = eth.storageAt(ADDR, "0x5").bin();
+		var name = eth.storageAt(ADDR, "5").bin();
 
 		var desc = "";
 		for (var i = 6; i <= 15; i++) {
-			var temp = eth.storageAt(ADDR, valToHex(i)).bin();
+			var temp = eth.storageAt(ADDR, i.toString()).bin();
 			desc = desc + temp;
 		}
 
@@ -403,9 +406,9 @@ generatePollTable = function(){
 }
 
 vote = function(yesno){
-	var yn = (yesno == "2") ? "0x2" : "0x1";
 	var ADDR = currentPollAddress;
-	var payload = "vote".unbin().pad(0,32) + yn.pad(32);
+	
+	var payload = "vote".unbin().pad(0,32) + yesno.toString().pad(32);
 	eth.transact(eth.key, "0", ADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
 	
 }
@@ -564,7 +567,7 @@ registerNickname = function(){
 	
 	var payload = "reg".unbin().pad(0,32) + nameString.unbin().pad(0,32);
 	//document.getElementById("registerNicknameInputField").value = payload;
-	eth.transact(eth.key, "0", nickADDR, payload, "100000", eth.gasPrice, dummyTransCallback);
+	eth.transact(eth.key, "0", nickADDR, payload, "100000", eth.gasPrice, registerNickCallback);
 	
 }
 
@@ -646,7 +649,7 @@ hexToVal = function(hex){
 
 // takes a decimal number and turns it into a proper hex string ("0x" + hexStr)
 valToHex = function(val){
-	return "0x" + val.toString(16);
+	return "0x" + val.toString();
 }
 
 toPayload = function(someText){
@@ -659,4 +662,7 @@ toPayloadSz = function(someText,sz){
 
 dummyTransCallback = function(){}
 
-
+registerNickCallback = function(){
+	window.alert("You have been registered. The page will be reloaded.");
+	window.location.reload(true);
+}
